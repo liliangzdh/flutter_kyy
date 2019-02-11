@@ -1,0 +1,15 @@
+
+import 'package:flutter/material.dart';
+import 'bloc/userinfo_bloc.dart';
+
+class BlocProvider extends InheritedWidget {
+  final UserInfoBloc bLoC = UserInfoBloc();
+
+  BlocProvider({Key key, Widget child}) : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(_) => true;
+
+  static UserInfoBloc of(BuildContext context) =>
+      (context.inheritFromWidgetOfExactType(BlocProvider) as BlocProvider).bLoC;
+}
