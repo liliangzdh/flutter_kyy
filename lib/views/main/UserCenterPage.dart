@@ -60,18 +60,20 @@ class _UserCenterPage extends State<UserCenterPage> {
             style: TextStyle(color: ColorConfig.color33, fontSize: 18)));
   }
 
-  go() {}
-
-  renderCell(String text, IconData book, BuildContext context) {
+  renderCell(String text, IconData book, BuildContext context, {onPress}) {
     return new Container(
       child: new ConstrainedBox(
         constraints: BoxConstraints.expand(),
         child: new FlatButton(
             padding: EdgeInsets.only(left: 0),
             onPressed: () {
-              print("--------------");
-              RouteUtils.instance
-                  .goWebView(context, Api.BASE_URL + "/i/user/profile",title: text);
+              if (onPress != null) {
+                onPress();
+                return;
+              }
+              RouteUtils.instance.goWebView(
+                  context, Api.BASE_URL + "/i/user/profile",
+                  title: text);
             },
             child: Row(
               children: <Widget>[
@@ -103,23 +105,9 @@ class _UserCenterPage extends State<UserCenterPage> {
         Line(color: ColorConfig.colorE5),
         renderCell("帮助和反馈", Icons.print, context),
         Line(height: 8, color: ColorConfig.colorEf),
-        renderCell("设置", Icons.print, context),
-        Container(
-          child: FlatButton(
-            onPressed: () {
-              RouteUtils.instance.cleanCookies();
-            },
-            child: Text("清除网页的cookie"),
-          ),
-        ),
-        Container(
-          child: FlatButton(
-            onPressed: () {
-              RouteUtils.instance.getCookie();
-            },
-            child: Text("显示cookie"),
-          ),
-        )
+        renderCell("设置", Icons.print, context, onPress: () {
+          RouteUtils.instance.go(context, new Setting());
+        }),
       ],
     );
   }
@@ -234,6 +222,15 @@ class _UserCenterPage extends State<UserCenterPage> {
     );
   }
 
+//  new Column(
+//  children: <Widget>[
+//  Container(
+//  child: renderList(context),
+//  padding: EdgeInsets.only(top: 10),
+//  ),
+//  Expanded(child: new Container(color: ColorConfig.colorF3)),
+//  ],
+//  )
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -258,16 +255,19 @@ class _UserCenterPage extends State<UserCenterPage> {
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)))),
-            child: new Column(
-              children: <Widget>[
-                Container(
-                  child: renderList(context),
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                Expanded(child: new Container(color: ColorConfig.colorF3)),
-              ],
+                        topLeft: Radius.circular(18),
+                        topRight: Radius.circular(18)))),
+            child: Container(
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                    child: renderList(context),
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+              color: ColorConfig.colorF3,
+              margin: EdgeInsets.only(top: 15),
             ),
           )
         ]),

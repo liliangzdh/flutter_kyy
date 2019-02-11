@@ -35,8 +35,7 @@ class _Login extends State<Login> {
     }
 
     AppResponse response = await LoginSrv.accountLogin(
-//        {"username": username, "password": password});
-        {"username": "13714996607", "password": "123456"});
+        {"username": username, "password": password});
 
     if (response.code == 200) {
       var token = response.result;

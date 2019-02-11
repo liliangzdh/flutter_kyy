@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutterkaoyaya/store/share_preferences.dart';
 import 'package:flutterkaoyaya/views/WebView.dart';
+import 'package:flutterkaoyaya/views/usercenter/setting.dart';
 
 class RouteUtils {
 //
@@ -47,6 +48,12 @@ class RouteUtils {
     print("-----------> get cookie  122");
     Map<String,String> cookie = await flutterWebViewPlugin.getCookies();
     print("------------->"+cookie.toString());
+  }
+
+  go(BuildContext context,dynamic any){
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+      return any;
+    }));
   }
 
 
