@@ -5,7 +5,7 @@ import 'dart:async';
 import '../common/Toast.dart';
 
 class LiveItem extends StatefulWidget {
-  PreLiveBean bean;
+  final PreLiveBean bean;
 
   @override
   State<StatefulWidget> createState() {

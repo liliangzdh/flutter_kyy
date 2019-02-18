@@ -5,14 +5,16 @@ class HomeTitle extends StatelessWidget {
   final String title;
   final bool showRightArrow;
   final VoidCallback click;
+  final EdgeInsetsGeometry margin;
+  final String rightText;
 
-  HomeTitle(this.title, {this.showRightArrow, this.click});
+  HomeTitle(this.title, {this.showRightArrow, this.click,this.margin,this.rightText});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return new Container(
-        margin: const EdgeInsets.only(top: 5, bottom: 10),
+        margin: this.margin==null?const EdgeInsets.only(top: 5, bottom: 10):this.margin,
         child: Row(children: <Widget>[
           Expanded(
             child: new Container(),
@@ -39,7 +41,7 @@ class HomeTitle extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         new Text(
-                          "更多",
+                          this.rightText==null?"更多":this.rightText,
                           style: TextStyle(fontSize: 16, color: Colors.black45),
                         ),
                         new Icon(

@@ -30,5 +30,10 @@ class UserInfoSrv {
     return ApiManager.instance.netFetch({"url": '/api/v1/distribute/resource'},params: {"examType":examType.toString()});
   }
 
+  ///根据产品分类id获取用户课程
+  static Future<AppResponse> getUserCourses(int sortTypeId) async{
+    return ApiManager.instance.netFetch({"url": '/knew/home/user/mycourse?topId=${sortTypeId.toString()}'});
+  }
+
 
 }

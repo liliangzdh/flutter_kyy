@@ -5,6 +5,7 @@ import 'package:flutterkaoyaya/common/routeUtils.dart';
 import 'package:flutterkaoyaya/components/HomeTitle.dart';
 import 'package:flutterkaoyaya/model/Category.dart';
 import 'package:flutter_kaoyaya_plugin/flutter_kaoyaya_plugin.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../../api/net/TiKuSrv.dart';
 import '../../api/net/useinfosrv.dart';
 import '../../api/net/liveMicroSrv.dart';
@@ -310,13 +311,12 @@ class HomePage extends State<Home> {
                     children: <Widget>[
                       new Container(
                         alignment: AlignmentDirectional.centerStart,
-                        child: new Text(
-                          "* * * * *",
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.amber,
-                          ),
+                        child: SmoothStarRating(
+                          starCount: 5,
+                          rating: 5,
+                          color: Colors.orange,
+                          size: 15,
+                          borderColor: Colors.orange,
                         ),
                         width: 80,
                       ),
@@ -442,7 +442,7 @@ class HomePage extends State<Home> {
       await getUserDistribute(bean.id);
       await getTiKuNet(bean.id);
       if (isDrawer) {
-        if(preLiveList.length == 0){
+        if (preLiveList.length == 0) {
           await getHomeLivePreLive();
         }
       } else {

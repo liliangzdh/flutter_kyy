@@ -12,4 +12,5 @@ class ColorConfig {
   static const Color colorEf = Color(0xFFefefef);
   static const Color colorE5 = Color(0xFFE5E5E5);
   static const Color baseColorPrime = Color(0xFF5f90fe);
+  static const Color color8F = Color(0xFF8F8F8F);
 }
