@@ -28,7 +28,7 @@ class UserInfo {
         currentExamType = json['currentExamType'],
         email = json['email'],
         mobile = json['mobile'],
-        status = json['status'],
+//        status = json['status'],
         nickname = json['nickname'],
         name = json['name'],
         qq = json['qq'],

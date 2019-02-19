@@ -30,8 +30,8 @@ dependencies:
   smooth_star_rating: ^1.0.1
   logging: ^0.11.3+2
   event_bus: ^1.0.1
-#  chewie: 0.9.5
-#  video_player: ^0.9.0
+  chewie: ^0.9.5
+  video_player: ^0.7.0
   flutter_kaoyaya_plugin:
       path: ./flutter_kaoyaya_plugin
   flutter_webview_plugin:

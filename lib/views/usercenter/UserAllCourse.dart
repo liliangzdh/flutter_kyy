@@ -250,7 +250,7 @@ class _UserAllCourse extends State<UserAllCourse> {
                     ),
                   ),
                   onPressed: () {
-                    RouteUtils.instance.go(context, new NormalCourse(item.id));
+                    RouteUtils.instance.go(context, new NormalCourse(item.id,Utils.getScreenWidth(context)));
                   },
                 );
               })
