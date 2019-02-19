@@ -25,12 +25,15 @@ dependencies:
   fluttertoast: ^2.2.3
   rxdart: ^0.19.0
   flutter_swiper: ^1.1.4
-#  flutter_webview_plugin: ^0.3.0+2
   package_info: 0.4.0+1
   smooth_star_rating: ^1.0.1
   logging: ^0.11.3+2
   event_bus: ^1.0.1
-  chewie: ^0.9.5
+#  chewie: ^0.9.5
+# 基于  chewie 0.9.5上修改一下
+  chewie:
+      git:
+        url: https://github.com/liliangzdh/chewie.git
   video_player: ^0.7.0
   flutter_kaoyaya_plugin:
       path: ./flutter_kaoyaya_plugin

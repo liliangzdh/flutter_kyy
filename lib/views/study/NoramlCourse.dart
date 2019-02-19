@@ -35,6 +35,13 @@ class _NormalCourse extends State<NormalCourse> {
       aspectRatio: widget.width / 240,
       autoPlay: true,
       looping: true,
+      iosUiType: UiType.MaterialUI,
+      materialProgressColors: ChewieProgressColors(
+        playedColor: Colors.redAccent,
+        handleColor: Colors.redAccent,
+        backgroundColor: Colors.grey,
+        bufferedColor: Colors.lightGreen,
+      ),
 //      customControls: Center(
 //        child: Container(
 //          alignment: AlignmentDirectional.center,
