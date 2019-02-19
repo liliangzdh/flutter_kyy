@@ -28,18 +28,24 @@ class _NormalCourse extends State<NormalCourse> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     videoPlayerController = VideoPlayerController.network(
         'https://vod.kaoyaya.com/3ba827e5fc1e4802b15c4758c3181d68/a713c75721e847daae72bfff7f5c11df-4b6ffae84f2e1d243955ecaedcf11a3e.m3u8');
-//        'https://flutter.github.io/assets-for-api-docs/videos/butterfly.mp4');
     chewieController = ChewieController(
-        videoPlayerController: videoPlayerController,
-        aspectRatio: widget.width / 240,
-        autoPlay: true,
-        looping: true,
-        customControls: Container(
-          child: Text("asas"),
-        ));
+      videoPlayerController: videoPlayerController,
+      aspectRatio: widget.width / 240,
+      autoPlay: true,
+      looping: true,
+//      customControls: Center(
+//        child: Container(
+//          alignment: AlignmentDirectional.center,
+//          child: Text("asas"),
+//          color: Colors.black.withOpacity(0.5),
+//          height: 50,
+//          width: widget.width,
+//        ),
+//      ),
+//      showControls: false,
+    );
 
     initNet();
   }
