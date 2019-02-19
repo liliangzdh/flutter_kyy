@@ -2,7 +2,7 @@
 class BroadCastingVideo {
   String picture;
   String title;
-  String id;
+  int  id;
   String type;
   String url;
   int isActivate;
@@ -24,7 +24,7 @@ class BroadCastingVideo {
   BroadCastingVideo.fromJson(Map<String, dynamic> json) {
     picture = json['picture'];
     title = json['title'];
-    id = json['id'];
+    id = int.parse(json['id']);
     type = json['type'];
     url = json['url'];
     isActivate = int.parse(json['is_activate']);
