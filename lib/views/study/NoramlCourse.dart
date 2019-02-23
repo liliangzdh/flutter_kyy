@@ -5,6 +5,7 @@ import 'package:flutterkaoyaya/api/net/StudySrv.dart';
 import 'package:flutterkaoyaya/common/Toast.dart';
 import 'package:flutterkaoyaya/common/routeUtils.dart';
 import 'package:flutterkaoyaya/common/utils.dart';
+import 'package:flutterkaoyaya/evenbus/event.dart';
 import 'package:flutterkaoyaya/model/app_response.dart';
 import 'package:flutterkaoyaya/model/course_info.dart';
 import 'package:flutterkaoyaya/model/lesson_info.dart';
@@ -191,7 +192,7 @@ class _NormalCourse extends State<NormalCourse> {
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
             Text(
-              "${lessonInfo.title}",
+              "${lessonInfo.title==null?"":lessonInfo.title}",
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
             FlatButton(
@@ -273,18 +274,24 @@ class _NormalCourse extends State<NormalCourse> {
 
   void initNet() async {
     AppResponse appResponse = await StudySrv.getCourseInfo(widget.courseID);
-    print(appResponse.result.toString());
+
+    if(appResponse.code != 200){
+      ToastUtils.show(appResponse.msg);
+      return;
+    }
+
     courseInfo = CourseInfo.fromJson(appResponse.result["courseInfo"]);
     List list = appResponse.result["list"];
 
     courseInfo.access = appResponse.result["access"];
     lessonList = list.map((m) => LessonInfoItem.fromJson(m)).toList();
-//    print("--" + appResponse.result["courseInfo"].toString());
 
     // 处理 数据 。给listView 展示出来。
     int j = 0;
     bool hasChapter = false;
     int chapterSelectIndex = 0;
+
+
     lessonList.forEach((info) {
       info.isSelect = info.id == courseInfo.lastLesson;
       if (info.type == "chapter") {
@@ -312,20 +319,35 @@ class _NormalCourse extends State<NormalCourse> {
       }
     });
 
+    if(hasChapter && lessonList[0].type != "chapter"){
+      //有chapter  但是 第一个 确不是video
+      for(int i=0;i<lessonList.length;i++){
+        lessonList[i].open = true;
+        if(lessonList[i].type == "chapter"){
+          break;
+        }
+      }
+    }
+
+    print("-----"+lessonList[0].open.toString()+lessonList[0].title);
+
+
     if (courseInfo.lastLesson != 0) {
       print("-----上次学习的lesson ID" + courseInfo.lastLesson.toString());
       appResponse = await StudySrv.getLessonInfo(
           widget.courseID, courseInfo.lastLesson.toString());
 
       if (appResponse.code == 200) {
-        print("----->" + appResponse.result.toString());
         lessonInfo = LessonInfo.fromJson(appResponse.result);
-        print("---->lessonInfo:" + lessonInfo.toString());
-        print("----" + lessonInfo.type);
+      }else{
+        ToastUtils.show(appResponse.msg);
       }
       //以前读取的默认选中
     }
     setState(() {});
+
+    //获取数据成功之后，自动滚动到自动位置
+    eventBus.fire(new VideoScrollEvent());
   }
 
 

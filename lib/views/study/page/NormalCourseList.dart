@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutterkaoyaya/components/Line.dart';
+import 'package:flutterkaoyaya/evenbus/event.dart';
 import 'package:flutterkaoyaya/model/course_info.dart';
 import 'package:flutterkaoyaya/model/lesson_info.dart';
 import 'package:flutterkaoyaya/theme/Colors.dart';
@@ -21,11 +24,60 @@ class NormalCourseList extends StatefulWidget {
 
 class _NormalCourseList extends State<NormalCourseList>
     with AutomaticKeepAliveClientMixin {
+  ScrollController _scrollController;
+
+  Timer timer;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-//    print("_NormalCourseList-------init" + widget.lessonList.length.toString());
+    _scrollController = new ScrollController();
+    countdown();
+    eventBus.on<VideoScrollEvent>().listen((VideoScrollEvent event) {
+      countdown();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
+  }
+
+  void countdown()  {
+    timer = new Timer(new Duration(seconds: 1), () {
+      // 只在倒计时结束时回调
+      if (mounted) {
+        double offset = 180;
+
+        LessonInfoItem info;
+        for (int i = 0; i < widget.lessonList.length; i++) {
+          if (widget.lessonList[i].isSelect) {
+            info = widget.lessonList[i];
+            break;
+          }
+        }
+
+        if (info != null) {
+          for (int i = 0; i < widget.lessonList.length; i++) {
+            if (widget.lessonList[i].type != "chapter" &&
+                widget.lessonList[i].open
+            ) {
+              offset += 40;
+
+              if (info.id == widget.lessonList[i].id) {
+                break;
+              }
+            } else if (widget.lessonList[i].type == "chapter") {
+              offset += 50;
+            }
+          }
+          print("-----offset:"+offset.toString());
+          _scrollController.animateTo(offset - 14,
+              duration: new Duration(milliseconds: 500), curve: Curves.ease);
+        }
+      }
+    });
   }
 
   _buildHeader(CourseInfo courseInfo) {
@@ -35,65 +87,68 @@ class _NormalCourseList extends State<NormalCourseList>
         lessonNum++;
       }
     }
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          courseInfo.title,
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.black,
-          ),
-        ),
-        Padding(
-          child: Text("$lessonNum个课时 . ${courseInfo.studentNum}人学过"),
-          padding: EdgeInsets.only(top: 10),
-        ),
-        new Container(
-          height: 50,
-          padding: EdgeInsets.only(right: 10),
-          child: Row(
-            children: <Widget>[
-              Icon(Icons.message),
-              Padding(
-                  padding: EdgeInsets.only(left: 2, bottom: 4),
-                  child: Text(
-                    "2122个评论",
-                    style: TextStyle(fontSize: 16),
-                  )),
-              Expanded(child: Container()),
-              Icon(Icons.screen_share),
-              Padding(padding: EdgeInsets.only(left: 2), child: Text("分享")),
-              Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Icon(Icons.file_download)),
-              Text("下载"),
-              Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Icon(Icons.assignment)),
-              Padding(padding: EdgeInsets.only(left: 2), child: Text("咨询")),
-            ],
-          ),
-        ),
-        Line(
-          height: 10,
-        ),
-        Container(
-          height: 56,
-          alignment: AlignmentDirectional.centerStart,
-          padding: EdgeInsets.only(left: 10),
-          child: Text(
-            "课时目录",
+    return Container(
+      height: 180,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            courseInfo.title,
             style: TextStyle(
               fontSize: 18,
+              color: Colors.black,
             ),
           ),
-        ),
-        Line(
-          height: 1,
-        )
-      ],
+          Padding(
+            child: Text("$lessonNum个课时 . ${courseInfo.studentNum}人学过"),
+            padding: EdgeInsets.only(top: 10),
+          ),
+          new Container(
+            height: 50,
+            padding: EdgeInsets.only(right: 10),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.message),
+                Padding(
+                    padding: EdgeInsets.only(left: 2, bottom: 4),
+                    child: Text(
+                      "2122个评论",
+                      style: TextStyle(fontSize: 16),
+                    )),
+                Expanded(child: Container()),
+                Icon(Icons.screen_share),
+                Padding(padding: EdgeInsets.only(left: 2), child: Text("分享")),
+                Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Icon(Icons.file_download)),
+                Text("下载"),
+                Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Icon(Icons.assignment)),
+                Padding(padding: EdgeInsets.only(left: 2), child: Text("咨询")),
+              ],
+            ),
+          ),
+          Line(
+            height: 10,
+          ),
+          Container(
+            height: 56,
+            alignment: AlignmentDirectional.centerStart,
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              "课时目录",
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ),
+          Line(
+            height: 1,
+          )
+        ],
+      ),
     );
   }
 
@@ -162,14 +217,11 @@ class _NormalCourseList extends State<NormalCourseList>
             child: FlatButton(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
-
-                  for(int j=0;j<widget.lessonList.length;j++){
-//                      print("-----"+widget.lessonList[j].id.toString()+"===="+lessonInfo.id.toString());
-                      widget.lessonList[j].isSelect = widget.lessonList[j].id == lessonInfo.id;
+                  for (int j = 0; j < widget.lessonList.length; j++) {
+                    widget.lessonList[j].isSelect =
+                        widget.lessonList[j].id == lessonInfo.id;
                   }
-                  setState(() {
-
-                  });
+                  setState(() {});
                   if (widget.lessonStudyOnPress != null) {
                     widget.lessonStudyOnPress(lessonInfo);
                   }
@@ -190,7 +242,11 @@ class _NormalCourseList extends State<NormalCourseList>
                                   : Colors.black87),
                         ),
                         decoration: BoxDecoration(
-                          border: Border.all(color: lessonInfo.isSelect?ColorConfig.baseColorPrime:Colors.black, width: 1),
+                          border: Border.all(
+                              color: lessonInfo.isSelect
+                                  ? ColorConfig.baseColorPrime
+                                  : Colors.black,
+                              width: 1),
                         ),
                         margin: EdgeInsets.only(right: 10),
                       ),
@@ -229,11 +285,9 @@ class _NormalCourseList extends State<NormalCourseList>
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-//    print(
-//        "_NormalCourseList-------build:" + widget.lessonList.length.toString());
     return Scaffold(
       body: ListView.builder(
+        controller: _scrollController,
         itemCount: widget.lessonList.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
