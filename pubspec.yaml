@@ -29,8 +29,6 @@ dependencies:
   smooth_star_rating: ^1.0.1
   logging: ^0.11.3+2
   event_bus: ^1.0.1
-#  chewie: ^0.9.5
-# 基于  chewie 0.9.5上修改一下
   chewie:
       git:
         url: https://github.com/liliangzdh/chewie.git

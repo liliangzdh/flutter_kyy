@@ -27,6 +27,9 @@ class AppStateBloc {
     setUerInfo(null);
   }
 
+
+
+
   //设置
   setCategory(List<Category> categoryList) {
     appState.categoryList = categoryList;
