@@ -162,6 +162,14 @@ class _NormalCourseList extends State<NormalCourseList>
             child: FlatButton(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
+
+                  for(int j=0;j<widget.lessonList.length;j++){
+//                      print("-----"+widget.lessonList[j].id.toString()+"===="+lessonInfo.id.toString());
+                      widget.lessonList[j].isSelect = widget.lessonList[j].id == lessonInfo.id;
+                  }
+                  setState(() {
+
+                  });
                   if (widget.lessonStudyOnPress != null) {
                     widget.lessonStudyOnPress(lessonInfo);
                   }
@@ -175,10 +183,14 @@ class _NormalCourseList extends State<NormalCourseList>
                         alignment: AlignmentDirectional.center,
                         child: Text(
                           lessonInfo.lessonType == "video" ? "视频" : "图片",
-                          style: TextStyle(fontSize: 10),
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: lessonInfo.isSelect
+                                  ? ColorConfig.baseColorPrime
+                                  : Colors.black87),
                         ),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 1),
+                          border: Border.all(color: lessonInfo.isSelect?ColorConfig.baseColorPrime:Colors.black, width: 1),
                         ),
                         margin: EdgeInsets.only(right: 10),
                       ),
@@ -187,6 +199,10 @@ class _NormalCourseList extends State<NormalCourseList>
                         child: Text(
                           lessonInfo.title,
                           maxLines: 1,
+                          style: TextStyle(
+                              color: lessonInfo.isSelect
+                                  ? ColorConfig.baseColorPrime
+                                  : Colors.black87),
                         ),
                       )),
                       lessonInfo.free == 1

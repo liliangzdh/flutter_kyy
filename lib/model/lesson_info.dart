@@ -15,6 +15,7 @@ class LessonInfoItem {
 
   int chapterIndex = 0;
   bool open = false;
+  bool isSelect = false;//是否选中的。
 
   @override
   String toString() {

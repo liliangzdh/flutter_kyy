@@ -68,7 +68,7 @@ class _NormalCourse extends State<NormalCourse> {
 
     videoPlayerController = VideoPlayerController.network(videoUrl);
     chewieController = ChewieController(
-      aspectRatio: Utils.getScreenWidth(context)/240,
+      aspectRatio: Utils.getScreenWidth(context) / 240,
       videoPlayerController: videoPlayerController,
       autoPlay: true,
       looping: true,
@@ -195,7 +195,11 @@ class _NormalCourse extends State<NormalCourse> {
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
             FlatButton(
-              onPressed: () {},
+              onPressed: () {
+
+                study(lessonInfo.status, lessonInfo.lessonId, lessonInfo.type,
+                    lessonInfo.target);
+              },
               child: Container(
                 padding:
                     EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
@@ -253,10 +257,9 @@ class _NormalCourse extends State<NormalCourse> {
               controller: mPageController,
               children: <Widget>[
                 NormalCourseList(lessonList, courseInfo,
-                    lessonStudyOnPress: (LessonInfoItem lessonInfo) {
-                  print("----->" + lessonInfo.title);
-                  print("----->" + lessonInfo.status);
-                  study(lessonInfo);
+                    lessonStudyOnPress: (LessonInfoItem lessonInfoItem) {
+                  study(lessonInfoItem.status, lessonInfoItem.id,
+                      lessonInfoItem.lessonType, lessonInfoItem.target);
                 }),
                 NormalCourseComment(),
               ],
@@ -281,8 +284,9 @@ class _NormalCourse extends State<NormalCourse> {
     // 处理 数据 。给listView 展示出来。
     int j = 0;
     bool hasChapter = false;
-    for (int i = 0; i < lessonList.length; i++) {
-      LessonInfoItem info = lessonList[i];
+    int chapterSelectIndex = 0;
+    lessonList.forEach((info) {
+      info.isSelect = info.id == courseInfo.lastLesson;
       if (info.type == "chapter") {
         info.chapterIndex = j;
         hasChapter = true;
@@ -290,14 +294,23 @@ class _NormalCourse extends State<NormalCourse> {
       } else {
         info.chapterIndex = j - 1;
       }
-    }
+      //要展示的chapter 如果有chapter 的话
+      if (hasChapter &&
+          courseInfo.lastLesson != 0 &&
+          (info.id == courseInfo.lastLesson)) {
+        chapterSelectIndex = info.chapterIndex;
+      }
+    });
 
-    //如果没有 chapter  这个目录，把所有的展示出来
-    if (!hasChapter) {
-      lessonList.forEach((item) {
+    lessonList.forEach((item) {
+      if (!hasChapter) {
+        //如果没有 chapter  这个目录，把所有的展示出来
         item.open = true;
-      });
-    }
+        item.isSelect = item.id == courseInfo.lastLesson;
+      } else {
+        item.open = chapterSelectIndex == item.chapterIndex;
+      }
+    });
 
     if (courseInfo.lastLesson != 0) {
       print("-----上次学习的lesson ID" + courseInfo.lastLesson.toString());
@@ -307,16 +320,18 @@ class _NormalCourse extends State<NormalCourse> {
       if (appResponse.code == 200) {
         print("----->" + appResponse.result.toString());
         lessonInfo = LessonInfo.fromJson(appResponse.result);
-        print("---->" + lessonInfo.toString());
+        print("---->lessonInfo:" + lessonInfo.toString());
         print("----" + lessonInfo.type);
       }
+      //以前读取的默认选中
     }
     setState(() {});
   }
 
-  //点击条目 看视频或者是其他
-  study(LessonInfoItem lessonInfoItem) async {
-    if (lessonInfoItem.status == "unpublished") {
+
+  ///点击条目 看视频或者是其他
+  study(String status, int id, String type, String target) async {
+    if (status == "unpublished") {
       ToastUtils.show("提示：该课时内容暂未发布,敬请期待！");
       return;
     }
@@ -329,10 +344,10 @@ class _NormalCourse extends State<NormalCourse> {
       }
       return;
     }
-    String state = jumpState(lessonInfoItem);
+    String state = jumpState(type, target);
 
     AppResponse appResponse =
-        await StudySrv.getLessonInfo(widget.courseID, "${lessonInfoItem.id}");
+        await StudySrv.getLessonInfo(widget.courseID, id.toString());
 
     if (appResponse.code != 200) {
       ToastUtils.show(appResponse.msg);
@@ -340,6 +355,7 @@ class _NormalCourse extends State<NormalCourse> {
     }
     print("----->" + appResponse.result.toString());
     lessonInfo = LessonInfo.fromJson(appResponse.result);
+    print("======state:" + state);
     switch (state) {
       case "video":
         setState(() {
@@ -350,10 +366,10 @@ class _NormalCourse extends State<NormalCourse> {
     }
   }
 
-  String jumpState(LessonInfoItem lesson) {
-    switch (lesson.lessonType) {
+  String jumpState(String lessonType, String target) {
+    switch (lessonType) {
       case "url":
-        if (lesson.target == 'iframe') {
+        if (target == 'iframe') {
           return "iframe";
         }
         return "outLink";
@@ -362,6 +378,7 @@ class _NormalCourse extends State<NormalCourse> {
       case "video":
         return "video";
     }
+    return "";
   }
 }
 
