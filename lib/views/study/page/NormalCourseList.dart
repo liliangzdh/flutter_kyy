@@ -63,17 +63,17 @@ class _NormalCourseList extends State<NormalCourseList>
             if (widget.lessonList[i].type != "chapter" &&
                 widget.lessonList[i].open
             ) {
-              offset += 40;
 
               if (info.id == widget.lessonList[i].id) {
                 break;
               }
+              offset += 40;
             } else if (widget.lessonList[i].type == "chapter") {
               offset += 50;
             }
           }
           print("-----offset:"+offset.toString());
-          _scrollController.animateTo(offset-14 ,
+          _scrollController.animateTo(offset ,
               duration: new Duration(milliseconds: 500), curve: Curves.ease);
         }
       }
@@ -287,6 +287,7 @@ class _NormalCourseList extends State<NormalCourseList>
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
+        padding: EdgeInsets.all(0),
         controller: _scrollController,
         itemCount: widget.lessonList.length + 1,
         itemBuilder: (context, index) {
