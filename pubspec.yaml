@@ -69,6 +69,7 @@ flutter:
     - assets/images/zb-jy.png
     - assets/images/bizhi.png
     - assets/images/xuexi.png
+    - assets/images/launchimg.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

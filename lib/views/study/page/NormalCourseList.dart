@@ -73,7 +73,7 @@ class _NormalCourseList extends State<NormalCourseList>
             }
           }
           print("-----offset:"+offset.toString());
-          _scrollController.animateTo(offset - 14,
+          _scrollController.animateTo(offset-14 ,
               duration: new Duration(milliseconds: 500), curve: Curves.ease);
         }
       }
