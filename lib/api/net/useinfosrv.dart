@@ -35,5 +35,9 @@ class UserInfoSrv {
     return ApiManager.instance.netFetch({"url": '/knew/home/user/mycourse?topId=${sortTypeId.toString()}'});
   }
 
+  ///获取用户的学习资源 studyResource
+  static Future<AppResponse> getStudyResource() async{
+    return ApiManager.instance.netFetch({"url": '/api/v1/users/studyResource'});
+  }
 
 }

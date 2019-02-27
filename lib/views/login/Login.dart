@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutterkaoyaya/evenbus/event.dart';
 import '../../model/app_response.dart';
 import '../../provide/single_global_instance/appstate_bloc.dart';
 import '../../common/Toast.dart';
@@ -45,6 +46,10 @@ class _Login extends State<Login> {
       if (response.code == 200) {
         var userInfo = UserInfo.fromJson(response.result);
         appStateBloc.setUerInfo(userInfo);
+
+        //登录
+        eventBus.fire(new LoginEvent(true));
+
         Navigator.of(context).pop();
         return;
       }
