@@ -94,30 +94,38 @@ class _StudyPage extends State<StudyPage> {
       return Container(width: 80);
     }
 
-    return Container(
-      width: 80,
-      alignment: AlignmentDirectional.center,
-      padding: EdgeInsets.only(left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Icon(
-            Icons.dehaze,
-            color: Colors.white,
-            size: 24,
-          ),
-          Container(
-            child: Text(
-              "切换",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
+    return FlatButton(
+      padding: EdgeInsets.all(0),
+      child: Container(
+        width: 80,
+        alignment: AlignmentDirectional.center,
+        padding: EdgeInsets.only(left: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Icon(
+              Icons.dehaze,
+              color: Colors.white,
+              size: 24,
             ),
-            margin: EdgeInsets.only(left: 2, bottom: 2),
-          ),
-        ],
+            Container(
+              child: Text(
+                "切换",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              margin: EdgeInsets.only(left: 2, bottom: 2),
+            ),
+          ],
+        ),
       ),
+      onPressed: () {
+        this.selectStudyResource = null;
+        setState(() {
+        });
+      },
     );
   }
 
