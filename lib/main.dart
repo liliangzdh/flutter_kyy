@@ -18,6 +18,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+//欢迎界面。
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => new _SplashScreenState();
