@@ -31,4 +31,9 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
+    dependencies {
+        // 自己封装的欢拓的sdk
+        implementation 'com.talkfun.cloudlive:talkFunLibiry:1.0.2'
+    }
 }

@@ -69,10 +69,6 @@ class HomePage extends State<Home> {
         title = title;
       });
     }
-    var platformVersion = await FlutterKaoyayaPlugin.platformVersion;
-
-    print("------->platformVersion:" + platformVersion.toString());
-
     return new Future.value(true);
   }
 
@@ -457,6 +453,11 @@ class HomePage extends State<Home> {
     print("--------------drawer init ");
   }
 
+  goActivity() async {
+    var platformVersion = await FlutterKaoyayaPlugin.platformVersion;
+    print("------->platformVersion:" + platformVersion.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -528,6 +529,12 @@ class HomePage extends State<Home> {
                     //名师直播
                     new HomeTitle("名师直播", showRightArrow: false),
                     renderLive(),
+
+                    new FlatButton(
+                        onPressed: () {
+                          goActivity();
+                        },
+                        child: Text("点击跳转"))
                   ],
                 ),
               )
