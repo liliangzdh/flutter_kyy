@@ -10,4 +10,12 @@ class FlutterKaoyayaPlugin {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
+
+  static void live (Map<String,dynamic> data){
+      _channel.invokeMethod('live',data);
+  }
+
+  static void downloadList (){
+      _channel.invokeMethod('downloadList');
+  }
 }

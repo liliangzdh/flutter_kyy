@@ -453,9 +453,15 @@ class HomePage extends State<Home> {
     print("--------------drawer init ");
   }
 
-  goActivity() async {
-    var platformVersion = await FlutterKaoyayaPlugin.platformVersion;
-    print("------->platformVersion:" + platformVersion.toString());
+  goActivity(){
+     FlutterKaoyayaPlugin.live(
+         {
+           "accessToken": "yEzMxMzM2UWMyEWYwM2YxAjZkJTOjJWOxYWN4QjYkZDf8xXfiQzMzQjMy8FN0MTM2UjI6ISZtFmbyJCLwojIhJCLiAjI6ICZpdmIs01W6Iic0RXYiwCOzkDM0MTM1UTM6ISZtlGdnVmciwiI0ITNyMTO1UjI6ICZphnIsUzMzETM6ICZpBnIsISVTx0bwlmYs10QQZDOqBlI6IyclR2bjJCL0MzM0IjM6ICZp9VZzJXdvNmIsIiI6IichRXY2FmIsAjOiIXZk5WZnJCL4MzNxUzMxUTNxojIlJXawhXZiwCN0MTM2UjOiQWat92byJCLiATNiVTdcBTNiVTdchjM3YTdcJiOiUWbh52ajlmbiwiIyV2c1JiOiUGbvJnIsICN1AzNyETMiojIklWdiwSNzMTMxojIkl2XyVmb0JXYwJye",
+           "title": "这是一个标题",
+           "playbackId":1495.toString(),
+           "type": "nolive" //live
+         }
+     );
   }
 
   @override
