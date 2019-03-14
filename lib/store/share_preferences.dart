@@ -14,10 +14,10 @@ class SharePreferenceUtils {
     return await preferences.get("token");
   }
 
-  static saveStudyClass() async {
+  static saveStudyClass(int id,String title) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.setInt("class_id",0);
-    return preferences.setString("class_title","");
+    await preferences.setInt("class_id",id);
+    return preferences.setString("class_title",title);
   }
 
   static getStudyClass() async {

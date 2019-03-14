@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kaoyaya_plugin/flutter_kaoyaya_plugin.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutterkaoyaya/common/routeUtils.dart';
 import 'package:flutterkaoyaya/components/HomeTitle.dart';
 import 'package:flutterkaoyaya/model/Category.dart';
-import 'package:flutter_kaoyaya_plugin/flutter_kaoyaya_plugin.dart';
+import 'package:flutterkaoyaya/model/live_info.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+
 import '../../api/net/TiKuSrv.dart';
-import '../../api/net/useinfosrv.dart';
 import '../../api/net/liveMicroSrv.dart';
+import '../../api/net/useinfosrv.dart';
+import '../../components/LiveItem.dart';
+import '../../dialog/CategoryDialog.dart';
+import '../../evenbus/event.dart';
 import '../../model/HomeDistribute.dart';
 import '../../model/HomeTopBar.dart';
+import '../../model/LiveBean.dart';
 import '../../model/TiKuSubject.dart';
 import '../../model/app_response.dart';
-import '../../model/LiveBean.dart';
-
-import '../../views/WebView.dart';
-import '../../components/LiveItem.dart';
-import '../../theme/Colors.dart';
 import '../../store/share_preferences.dart';
-import '../../evenbus/event.dart';
-import '../../dialog/CategoryDialog.dart';
+import '../../theme/Colors.dart';
+import '../../provide/single_global_instance/appstate_bloc.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -413,12 +414,18 @@ class HomePage extends State<Home> {
         height: 200,
       );
     }
-
     return new Column(
       children: preLiveList.map((PreLiveBean bean) {
-        return new LiveItem(bean);
+        return new LiveItem(bean, this.goLive);
       }).toList(),
     );
+  }
+
+  void goLive(PreLiveBean bean) {
+    print("------->" + bean.lessonTitle);
+    LiveInfo info =
+        LiveInfo(bean.access, bean.startTime, bean.mediaId, bean.free);
+    RouteUtils.instance.goLive(info,appStateBloc.value.isLogin,context);
   }
 
   ///刷新
@@ -453,15 +460,14 @@ class HomePage extends State<Home> {
     print("--------------drawer init ");
   }
 
-  goActivity(){
-     FlutterKaoyayaPlugin.live(
-         {
-           "accessToken": "yEzMxMzM2UWMyEWYwM2YxAjZkJTOjJWOxYWN4QjYkZDf8xXfiQzMzQjMy8FN0MTM2UjI6ISZtFmbyJCLwojIhJCLiAjI6ICZpdmIs01W6Iic0RXYiwCOzkDM0MTM1UTM6ISZtlGdnVmciwiI0ITNyMTO1UjI6ICZphnIsUzMzETM6ICZpBnIsISVTx0bwlmYs10QQZDOqBlI6IyclR2bjJCL0MzM0IjM6ICZp9VZzJXdvNmIsIiI6IichRXY2FmIsAjOiIXZk5WZnJCL4MzNxUzMxUTNxojIlJXawhXZiwCN0MTM2UjOiQWat92byJCLiATNiVTdcBTNiVTdchjM3YTdcJiOiUWbh52ajlmbiwiIyV2c1JiOiUGbvJnIsICN1AzNyETMiojIklWdiwSNzMTMxojIkl2XyVmb0JXYwJye",
-           "title": "这是一个标题",
-           "playbackId":1495.toString(),
-           "type": "nolive" //live
-         }
-     );
+  goActivity() {
+    FlutterKaoyayaPlugin.live({
+      "accessToken":
+          "yEzMxMzM2UWMyEWYwM2YxAjZkJTOjJWOxYWN4QjYkZDf8xXfiQzMzQjMy8FN0MTM2UjI6ISZtFmbyJCLwojIhJCLiAjI6ICZpdmIs01W6Iic0RXYiwCOzkDM0MTM1UTM6ISZtlGdnVmciwiI0ITNyMTO1UjI6ICZphnIsUzMzETM6ICZpBnIsISVTx0bwlmYs10QQZDOqBlI6IyclR2bjJCL0MzM0IjM6ICZp9VZzJXdvNmIsIiI6IichRXY2FmIsAjOiIXZk5WZnJCL4MzNxUzMxUTNxojIlJXawhXZiwCN0MTM2UjOiQWat92byJCLiATNiVTdcBTNiVTdchjM3YTdcJiOiUWbh52ajlmbiwiIyV2c1JiOiUGbvJnIsICN1AzNyETMiojIklWdiwSNzMTMxojIkl2XyVmb0JXYwJye",
+      "title": "这是一个标题",
+      "playbackId": 1495.toString(),
+      "type": "nolive" //live
+    });
   }
 
   @override

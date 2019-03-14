@@ -37,4 +37,13 @@ class Utils {
     }
     return 0;
   }
+
+  static bool isLiveStarted(String start){
+    DateTime now = DateTime.now();
+    DateTime startTime = DateTime.parse(start);
+    if (now.isAfter(startTime)) {
+      return true;
+    }
+    return false;
+  }
 }

@@ -56,7 +56,7 @@ class _Setting extends State<Setting> {
                           onPressed: () {
                             appStateBloc.logout();
                             SharePreferenceUtils.saveToken("");
-                            SharePreferenceUtils.saveStudyClass();
+                            SharePreferenceUtils.saveStudyClass(0,"");
                           },
                           child: new Text("退出登录",
                               style: TextStyle(fontSize: 18)))),

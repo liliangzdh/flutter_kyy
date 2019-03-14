@@ -289,7 +289,9 @@ class _StudyPage extends State<StudyPage> {
 
     return new Column(
       children: preLiveList.map((PreLiveBean bean) {
-        return new LiveItem(bean);
+        return new LiveItem(bean,(){
+
+        });
       }).toList(),
     );
   }
@@ -452,6 +454,8 @@ class _StudyPage extends State<StudyPage> {
                     (StudyResource item, int type) {
                     if (type == 1) {
                       selectStudyResource = item;
+                      //todo 保存数据
+                      SharePreferenceUtils.saveStudyClass(item.id,item.title);
                       setState(() {});
                     } else if (type == 2) {
                       //
