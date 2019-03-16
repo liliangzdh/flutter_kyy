@@ -11,7 +11,7 @@ class FlutterKaoyayaPlugin {
     return version;
   }
 
-  static void live (Map<String,dynamic> data){
+  static void live (Map<String,String> data){
       _channel.invokeMethod('live',data);
   }
 

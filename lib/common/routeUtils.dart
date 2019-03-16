@@ -4,13 +4,12 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutterkaoyaya/api/net/liveMicroSrv.dart';
 import 'package:flutterkaoyaya/common/Toast.dart';
 import 'package:flutterkaoyaya/common/utils.dart';
-import 'package:flutterkaoyaya/model/LiveBean.dart';
 import 'package:flutterkaoyaya/model/app_response.dart';
-import 'package:flutterkaoyaya/model/live_info.dart';
+import 'package:flutterkaoyaya/provide/single_global_instance/appstate_bloc.dart';
 import 'package:flutterkaoyaya/store/share_preferences.dart';
 import 'package:flutterkaoyaya/views/WebView.dart';
+import 'package:flutterkaoyaya/views/live/live_tip.dart';
 import 'package:flutterkaoyaya/views/login/Login.dart';
-import 'package:flutterkaoyaya/views/usercenter/setting.dart';
 
 class RouteUtils {
 //
@@ -81,23 +80,24 @@ class RouteUtils {
 //  free?: 0 | 1 | '0' | '1';
 //  type?: 'live' | 'playback',
   //去直播界面
-  goLive(LiveInfo info, bool isLogin, BuildContext context) {
-    bool access = (info.free + info.access) > 0;
-    bool isStart = Utils.isLiveStarted(info.startTime);
+  goLive2(BuildContext context, int accessCode, String startTime, int free,
+      int mediaId, String type) {
+    bool isLogin = appStateBloc.value.isLogin;
+    bool access = (free + accessCode) > 0;
+    bool isStart = Utils.isLiveStarted(startTime);
     if (access && isStart) {
       if (isLogin) {
-        LiveMicroSrv.getAccessToken(info.liveID.toString())
+        LiveMicroSrv.getAccessToken(mediaId.toString())
             .then((AppResponse data) {
           if (data.code == 200) {
             var result = data.result;
             FlutterKaoyayaPlugin.live({
               "accessToken": result["accessToken"],
               "title": result["title"],
-              "playbackId": info.liveID,
-              "type": info.type.length > 0 ? info.type : "live" //live
+              "playbackId": mediaId.toString(),
+              "type": type //live
             });
           } else {
-            print("-----err-----" + data.msg);
             ToastUtils.show(data.msg);
           }
         });
@@ -105,7 +105,16 @@ class RouteUtils {
         goLogin(context);
       }
     } else {
-      print("-----去livetip 页面");
+      go(context, LiveTip(mediaId));
     }
+  }
+
+  //直播去直播
+  goNowLive(String accessToken,String title ){
+    FlutterKaoyayaPlugin.live({
+      "accessToken": accessToken,
+      "title": title,
+      "type": "live" //live
+    });
   }
 }

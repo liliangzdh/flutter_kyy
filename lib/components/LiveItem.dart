@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterkaoyaya/common/timeutils.dart';
 import '../model/LiveBean.dart';
 import '../theme/Colors.dart';
 import 'dart:async';
@@ -8,13 +9,14 @@ class LiveItem extends StatefulWidget {
   final PreLiveBean bean;
 
   final Function function;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return new _LiveItem();
   }
 
-  LiveItem(this.bean,this.function);
+  LiveItem(this.bean, this.function);
 }
 
 class _LiveItem extends State<LiveItem> {
@@ -39,16 +41,10 @@ class _LiveItem extends State<LiveItem> {
   }
 
   formatTime(String startTime) {
-    isLiveShow = isLive(widget.bean.startTime, widget.bean.endTime);
-    DateTime now = DateTime.now();
-    DateTime startDate = DateTime.parse(startTime);
-    Duration duration = startDate.difference(now);
-    int hours = duration.inHours;
-    int minutes = duration.inMinutes % 60;
-    int seconds = duration.inSeconds % 60;
-    if (duration.inSeconds > 0) {
-      time =
-          "${timeStr(hours, "小时")}${timeStr(minutes, "分")}${timeStr(seconds, "秒")}";
+    isLiveShow = TimeUtils.isLive(widget.bean.startTime, widget.bean.endTime);
+    Map<String, dynamic> data = TimeUtils.formatSampleTime(startTime);
+    if (data['duration'].inSeconds > 0) {
+      time = data['timeString'];
       //开启倒计时
       _timer?.cancel();
       _timer = null;
@@ -61,48 +57,21 @@ class _LiveItem extends State<LiveItem> {
   }
 
   cupTime() {
-    isLiveShow = isLive(widget.bean.startTime, widget.bean.endTime);
-    DateTime now = DateTime.now();
-    DateTime startDate = DateTime.parse(widget.bean.startTime);
-    Duration duration = startDate.difference(now);
-    int hours = duration.inHours;
-    int minutes = duration.inMinutes % 60;
-    int seconds = duration.inSeconds % 60;
-    if (duration.inSeconds > 0) {
-      time =
-          "${timeStr(hours, "小时")}${timeStr(minutes, "分")}${timeStr(seconds, "秒")}";
+    isLiveShow = TimeUtils.isLive(widget.bean.startTime, widget.bean.endTime);
+    Map<String, dynamic> data =
+        TimeUtils.formatSampleTime(widget.bean.startTime);
+    if (data['duration'].inSeconds > 0) {
+      time = data['timeString'];
     } else {
       time = "00时00分00秒";
       _timer?.cancel();
       _timer = null;
-      //倒计时结束
-      print("---------->倒计时结束");
       ToastUtils.show("倒计时结束");
     }
     setState(() {
       time = time;
       isLiveShow = isLiveShow;
     });
-  }
-
-  timeStr(int i, String str) {
-    if (i >= 10) {
-      return "${i.toString()}" + str;
-    }
-    if (i > 0) {
-      return "0${i.toString()}" + str;
-    }
-    return "00" + str;
-  }
-
-  isLive(String start, String end) {
-    DateTime now = DateTime.now();
-    DateTime startTime = DateTime.parse(start);
-    DateTime endTime = DateTime.parse(end);
-    if (now.isAfter(startTime) && now.isBefore(endTime)) {
-      return true;
-    }
-    return false;
   }
 
   @override
@@ -188,7 +157,7 @@ class _LiveItem extends State<LiveItem> {
         ),
       ),
       onPressed: () {
-       widget.function(widget.bean);
+        widget.function(widget.bean);
       },
     );
   }

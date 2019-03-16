@@ -13,6 +13,8 @@ class PreLiveBean {
   int free;
   int access;
 
+  String type = "live";
+
   PreLiveBean.fromJson(Map<String, dynamic> json) {
     mediaId = int.parse(json['mediaId']);
     picture = json['picture'];

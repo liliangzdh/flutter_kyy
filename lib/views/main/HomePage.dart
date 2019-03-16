@@ -422,10 +422,7 @@ class HomePage extends State<Home> {
   }
 
   void goLive(PreLiveBean bean) {
-    print("------->" + bean.lessonTitle);
-    LiveInfo info =
-        LiveInfo(bean.access, bean.startTime, bean.mediaId, bean.free);
-    RouteUtils.instance.goLive(info,appStateBloc.value.isLogin,context);
+    RouteUtils.instance.goLive2(context,bean.access,bean.startTime,bean.free,bean.mediaId,"live");
   }
 
   ///刷新
@@ -444,13 +441,7 @@ class HomePage extends State<Home> {
       print("--------name:>" + bean.name);
       await getUserDistribute(bean.id);
       await getTiKuNet(bean.id);
-      if (isDrawer) {
-        if (preLiveList.length == 0) {
-          await getHomeLivePreLive();
-        }
-      } else {
-        await getHomeLivePreLive();
-      }
+      await getHomeLivePreLive();
       print("-----------on refresh end");
     }
   }
