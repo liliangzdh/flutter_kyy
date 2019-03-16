@@ -25,48 +25,29 @@ class _WebView extends State<WebView> {
     super.initState();
     flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged wvs) {
       if (widget.jsCode != null && widget.jsCode.length != 0) {
-
-        print('------------------33');
-//        flutterWebviewPlugin.evalJavascript(widget.jsCode);
-
-//        flutterWebviewPlugin.evalJavascript("javascript:(" + "window.originalPostMessage = window.postMessage,"
-//            + "window.postMessage = function(data) {" + widget.jsCode + ".postMessage(String(data));" + "}"
-//            + ")");
-
-//        flutterWebviewPlugin.reloadUrl("javascript:(" + "window.originalPostMessage = window.postMessage,"
-//            + "window.postMessage = function(data) {" + widget.jsCode + ".postMessage(String(data));" + "}"
-//            + ")");
-
       }
 
-      print(wvs.type);
       if (wvs.type == WebViewState.startLoad) {
 
       }
 
       if (wvs.type == WebViewState.shouldStart) {
-//        flutterWebviewPlugin.reloadUrl(url)
 
       }
 
       if(wvs.type == WebViewState.finishLoad){
-        
-
-
 
       }
     });
 
     flutterWebviewPlugin.onUrlChanged.listen((String url) {
-      print('----------->12' + url);
-
     });
 
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
 
     return new WebviewScaffold(
       url: widget.url,
@@ -75,11 +56,10 @@ class _WebView extends State<WebView> {
         title: Text(widget.title==null?widget.url:widget.title),
       ),
       withZoom: true,
+      withJavascript: true,
       headers: {"x-token": widget.token},
       withLocalStorage: true,
       cookieList:widget.cookie ,
     );
-
-//    return new Container();
   }
 }

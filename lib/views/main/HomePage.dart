@@ -22,6 +22,7 @@ import '../../model/app_response.dart';
 import '../../store/share_preferences.dart';
 import '../../theme/Colors.dart';
 import '../../provide/single_global_instance/appstate_bloc.dart';
+import '../../config/config.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -41,10 +42,10 @@ class HomePage extends State<Home> {
   List<PreLiveBean> preLiveList = [];
 
   List<HomeTopBar> topList = [
-    HomeTopBar("精选好课", "assets/images/xuexi.png", "https://www.baidu.com"),
-    HomeTopBar("回答指南", "assets/images/wenda1.png", "https://www.baidu.com"),
-    HomeTopBar("免费试听", "assets/images/bizhi.png", "https://www.baidu.com"),
-    HomeTopBar("在线咨询", "assets/images/online.png", "https://www.baidu.com")
+    HomeTopBar("精选好课", "assets/images/xuexi.png"),
+    HomeTopBar("回答指南", "assets/images/wenda1.png"),
+    HomeTopBar("免费试听", "assets/images/bizhi.png"),
+    HomeTopBar("在线咨询", "assets/images/online.png")
   ];
 
   String title = "";
@@ -141,6 +142,8 @@ class HomePage extends State<Home> {
     RouteUtils.instance.goWebView(context, resourceURL);
   }
 
+  ///精品体验课
+
   ///展示顶部4个按钮
   showTop() {
     List<Widget> list = [];
@@ -149,7 +152,20 @@ class HomePage extends State<Home> {
       var view = new Expanded(
           child: new GestureDetector(
         onTapUp: (_) {
-          goWebView(bean.targetUrl);
+          switch (i) {
+            case 0:
+              String url = "${Api.BASE_URL}/i/goodsStore}";
+              goWebView(url);
+              break;
+            case 1:
+              break;
+            case 2:
+              String url = Api.BASE_URL + '/i/home/list/1';
+              goWebView(url);
+              break;
+            case 3:
+              break;
+          }
         },
         child: Container(
             child: new Column(children: <Widget>[
@@ -179,7 +195,6 @@ class HomePage extends State<Home> {
         )));
   }
 
-  ///精品体验课
   renderGood() {
     if (resultList.length == 0) {
       return new Container();
@@ -279,62 +294,67 @@ class HomePage extends State<Home> {
 
         children: data.map((Distribute bean) {
           //单个的高度 ： screenWidth/2 * childAspectRatio :
-          return new Container(
-            padding: EdgeInsets.only(left: 5),
-            child: new Column(
-              children: <Widget>[
-                new Image.network(
-                  bean.pictureURL,
-                  fit: BoxFit.fill,
-                  width: MediaQuery.of(context).size.width / 2,
-                  height: 100,
-                ),
-                new Container(
-                  child: new Text(
-                    bean.name,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black87,
+          return FlatButton(
+              onPressed: () {
+                goWebView(bean.resourceURL);
+              },
+              padding: EdgeInsets.all(0),
+              child: new Container(
+                padding: EdgeInsets.only(left: 5),
+                child: new Column(
+                  children: <Widget>[
+                    new Image.network(
+                      bean.pictureURL,
+                      fit: BoxFit.fill,
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: 100,
                     ),
-                  ),
-                  margin: EdgeInsets.only(top: 10),
-                  alignment: AlignmentDirectional.centerStart,
-                ),
-                new Container(
-                  margin: EdgeInsets.only(top: 4),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      new Container(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: SmoothStarRating(
-                          starCount: 5,
-                          rating: 5,
-                          color: Colors.orange,
-                          size: 15,
-                          borderColor: Colors.orange,
+                    new Container(
+                      child: new Text(
+                        bean.name,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black87,
                         ),
-                        width: 80,
                       ),
-                      new Expanded(
-                          child: Container(
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: new Text(
-                          bean.remark.trim(),
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black12,
+                      margin: EdgeInsets.only(top: 10),
+                      alignment: AlignmentDirectional.centerStart,
+                    ),
+                    new Container(
+                      margin: EdgeInsets.only(top: 4),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          new Container(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: SmoothStarRating(
+                              starCount: 5,
+                              rating: 5,
+                              color: Colors.orange,
+                              size: 15,
+                              borderColor: Colors.orange,
+                            ),
+                            width: 80,
                           ),
-                        ),
-                      )),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
+                          new Expanded(
+                              child: Container(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: new Text(
+                              bean.remark.trim(),
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black12,
+                              ),
+                            ),
+                          )),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ));
         }).toList(),
       ),
     );
@@ -422,7 +442,8 @@ class HomePage extends State<Home> {
   }
 
   void goLive(PreLiveBean bean) {
-    RouteUtils.instance.goLive2(context,bean.access,bean.startTime,bean.free,bean.mediaId,"live");
+    RouteUtils.instance.goLive2(
+        context, bean.access, bean.startTime, bean.free, bean.mediaId, "live");
   }
 
   ///刷新

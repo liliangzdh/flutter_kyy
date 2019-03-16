@@ -242,5 +242,9 @@ class _LiveTip extends State<LiveTip> {
     }
     liveState =
         TimeUtils.judgeState(appStateBloc.value.isLogin, liveInfo.startTime);
+    setState(() {
+      liveState = liveState;
+      liveInfo = liveInfo;
+    });
   }
 }

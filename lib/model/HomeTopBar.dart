@@ -6,5 +6,5 @@ class HomeTopBar {
   String imageRul;
 
   String targetUrl;
-  HomeTopBar(this.name, this.imageRul,this.targetUrl);
+  HomeTopBar(this.name, this.imageRul);
 }
