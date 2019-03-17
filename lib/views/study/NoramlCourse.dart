@@ -9,6 +9,7 @@ import 'package:flutterkaoyaya/evenbus/event.dart';
 import 'package:flutterkaoyaya/model/app_response.dart';
 import 'package:flutterkaoyaya/model/course_info.dart';
 import 'package:flutterkaoyaya/model/lesson_info.dart';
+import 'package:flutterkaoyaya/model/tab_title.dart';
 import 'package:flutterkaoyaya/views/study/page/NormalCourseComment.dart';
 import 'package:flutterkaoyaya/views/study/page/NormalCourseList.dart';
 import 'package:video_player/video_player.dart';
@@ -404,9 +405,4 @@ class _NormalCourse extends State<NormalCourse> {
   }
 }
 
-class TabTitle {
-  String title;
-  int id;
 
-  TabTitle(this.title, this.id);
-}

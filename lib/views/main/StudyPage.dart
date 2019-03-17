@@ -15,6 +15,7 @@ import 'package:flutterkaoyaya/model/study_course.dart';
 import 'package:flutterkaoyaya/provide/single_global_instance/appstate.dart';
 import 'package:flutterkaoyaya/provide/single_global_instance/appstate_bloc.dart';
 import 'package:flutterkaoyaya/store/share_preferences.dart';
+import 'package:flutterkaoyaya/views/live/live.dart';
 import 'package:flutterkaoyaya/views/main/page/study_menu.dart';
 import 'package:flutterkaoyaya/views/main/page/study_nologin.dart';
 import 'package:flutterkaoyaya/views/usercenter/UserAllCourse.dart';
@@ -427,7 +428,9 @@ class _StudyPage extends State<StudyPage> {
                         rightText: "我的直播",
                         margin: EdgeInsets.only(top: 0, bottom: 0),
                         showRightArrow: true,
-                        click: () {}),
+                        click: () {
+                             RouteUtils.instance.go(context, Live());
+                        }),
                   ],
                 ),
               ),

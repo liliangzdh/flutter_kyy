@@ -15,7 +15,11 @@ class VideoScrollEvent {
 
 
 class LoginEvent{
-
   bool isLogin;
   LoginEvent(this.isLogin);
+}
+
+class TabChangeEvent {
+  int index;
+  TabChangeEvent(this.index);
 }
