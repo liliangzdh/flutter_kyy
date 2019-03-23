@@ -34,6 +34,18 @@ class PreLiveBean {
     access = Utils.formatInt("access", json);
     number = Utils.formatInt("number", json);
     title = json['title'];
+
+    if(startTime == null || startTime.length == 0){
+      startTime = json['startTime'];
+    }
+    if(endTime == null || endTime.length == 0){
+      endTime = json['endTime'];
+    }
+
+    if(mediaId == 0){
+      mediaId = json['mediaID'];
+    }
+
   }
 
 

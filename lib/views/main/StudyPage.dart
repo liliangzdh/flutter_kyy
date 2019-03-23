@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterkaoyaya/api/net/ClassroomSrv.dart';
 import 'package:flutterkaoyaya/api/net/useinfosrv.dart';
 import 'package:flutterkaoyaya/common/Toast.dart';
 import 'package:flutterkaoyaya/common/routeUtils.dart';
@@ -8,16 +9,19 @@ import 'package:flutterkaoyaya/components/Line.dart';
 import 'package:flutterkaoyaya/components/LiveItem.dart';
 import 'package:flutterkaoyaya/components/MyAppBar.dart';
 import 'package:flutterkaoyaya/components/UserCircleImage.dart';
+import 'package:flutterkaoyaya/components/item_video_record.dart';
 import 'package:flutterkaoyaya/evenbus/event.dart';
 import 'package:flutterkaoyaya/model/LiveBean.dart';
 import 'package:flutterkaoyaya/model/app_response.dart';
 import 'package:flutterkaoyaya/model/study_course.dart';
+import 'package:flutterkaoyaya/model/study_learnInfo.dart';
 import 'package:flutterkaoyaya/provide/single_global_instance/appstate.dart';
 import 'package:flutterkaoyaya/provide/single_global_instance/appstate_bloc.dart';
 import 'package:flutterkaoyaya/store/share_preferences.dart';
 import 'package:flutterkaoyaya/views/live/live.dart';
 import 'package:flutterkaoyaya/views/main/page/study_menu.dart';
 import 'package:flutterkaoyaya/views/main/page/study_nologin.dart';
+import 'package:flutterkaoyaya/views/tiku/tiku.dart';
 import 'package:flutterkaoyaya/views/usercenter/UserAllCourse.dart';
 import '../../theme/Colors.dart';
 
@@ -29,13 +33,17 @@ class StudyPage extends StatefulWidget {
   }
 }
 
-class _StudyPage extends State<StudyPage> {
-  final List<PreLiveBean> preLiveList = [];
+class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
+  List<PreLiveBean> preLiveList = [];
 
   List<StudyResource> classList = [];
   List<StudyResource> courseList = [];
 
   StudyResource selectStudyResource;
+  List<StudyLearnInfo> studyLearnInfoList;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   initState() {
@@ -48,8 +56,11 @@ class _StudyPage extends State<StudyPage> {
 
   initNet() async {
     selectStudyResource = await SharePreferenceUtils.getStudyClass();
+    refresh();
+  }
+
+  getStudyResource() async {
     AppResponse appResponse = await UserInfoSrv.getStudyResource();
-    print("------------qwqw" + appResponse.result.toString());
     if (appResponse.code != 200) {
       setState(() {});
       return;
@@ -58,8 +69,40 @@ class _StudyPage extends State<StudyPage> {
     List courseArr = appResponse.result['course'];
     classList = classArr.map((m) => StudyResource.fromJson(m)).toList();
     courseList = courseArr.map((m) => StudyResource.fromJson(m)).toList();
-    print("-----class :" + classList.length.toString());
     setState(() {});
+  }
+
+  refresh() {
+    getStudyResource();
+    getClassStudyResource();
+  }
+
+  getClassStudyResource() async {
+    if (selectStudyResource == null) {
+      return;
+    }
+
+    print("--------id:" + selectStudyResource.id.toString());
+    AppResponse appResponse =
+        await ClassroomMicroSrv.learnInfo(selectStudyResource.id);
+
+    print("---" + appResponse.result.toString());
+    if (appResponse.code == 200) {
+      List normal = appResponse.result['normal'];
+      studyLearnInfoList = normal.map((m) {
+        return StudyLearnInfo.fromJson(m);
+      }).toList();
+
+      List liveList = appResponse.result['live'];
+      preLiveList = liveList.map((m) {
+        return PreLiveBean.fromJson(m);
+      }).toList();
+      setState(() {
+        studyLearnInfoList = studyLearnInfoList;
+        preLiveList = preLiveList;
+      });
+    }
+    print(appResponse.toString());
   }
 
   ///自定义头部
@@ -124,8 +167,7 @@ class _StudyPage extends State<StudyPage> {
       ),
       onPressed: () {
         this.selectStudyResource = null;
-        setState(() {
-        });
+        setState(() {});
       },
     );
   }
@@ -182,74 +224,16 @@ class _StudyPage extends State<StudyPage> {
 
   ///我的课程
   renderClass() {
-//    if (resultList.length == 0) {
-//      return new Container();
-//    }
-
-    var goodData = [1, 2, 3, 4, 5, 6];
+    if (studyLearnInfoList == null || studyLearnInfoList.length == 0) {
+      return new Container(
+        child: Text("暂无记录"),
+      );
+    }
     return new ListView.builder(
-        itemCount: goodData.length,
+        itemCount: studyLearnInfoList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return new Container(
-              margin: const EdgeInsets.only(left: 10, right: 10),
-              decoration: BoxDecoration(
-                color: ColorConfig.colorEf,
-                borderRadius: BorderRadius.all(new Radius.circular(5)),
-              ),
-              child: FlatButton(
-                  onPressed: () {},
-                  highlightColor: ColorConfig.colorE5,
-                  padding: EdgeInsets.only(left: 0, right: 0),
-                  child: new Column(children: <Widget>[
-                    new Container(
-                        child: new Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          child: new Stack(
-                            children: <Widget>[
-                              new CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      "https://vuejs.bootcss.com/images/logo.png"),
-                                  radius: 30),
-                              Icon(
-                                Icons.play_arrow,
-                                color: Colors.white,
-                                size: 40,
-                              ),
-                            ],
-                            alignment: AlignmentDirectional.center,
-                          ),
-                        ),
-                        height: 80),
-                    new Container(
-                        margin: EdgeInsets.only(top: 5),
-                        child: Text("班级常见问题",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: ColorConfig.color33,
-                            ))),
-                    new Container(
-                      child: Text("已经10%",
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: ColorConfig.color66,
-                          )),
-                      margin: const EdgeInsets.only(top: 5),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    SizedBox(
-                      height: 3.0,
-                      child: new LinearProgressIndicator(
-                        value: 0.6,
-                        backgroundColor: ColorConfig.colorEf,
-                      ),
-                    ),
-                  ])),
-              height: 120,
-              width: 240);
+          return VideoRecordItem(info: studyLearnInfoList[index]);
         });
   }
 
@@ -282,19 +266,21 @@ class _StudyPage extends State<StudyPage> {
 
   ///直播列表
   renderLive() {
-//    if (preLiveList == null || preLiveList.length == 0) {
-//      return new Container(
-//        height: 200,
-//      );
-//    }
-
+    if (preLiveList == null || preLiveList.length == 0) {
+      return new Container(
+        height: 200,
+      );
+    }
     return new Column(
       children: preLiveList.map((PreLiveBean bean) {
-        return new LiveItem(bean,(){
-
-        });
+        return new LiveItem(bean, this.goLive);
       }).toList(),
     );
+  }
+
+  void goLive(PreLiveBean bean) {
+    RouteUtils.instance
+        .goLive2(context, 1, bean.startTime, bean.free, bean.mediaId, "live");
   }
 
   ///一切正常的页面。
@@ -380,11 +366,15 @@ class _StudyPage extends State<StudyPage> {
                     ),
 
                     ///在学题库
-                    new HomeTitle("在线题库",
-                        rightText: "我的题库",
-                        margin: EdgeInsets.only(top: 0, bottom: 0),
-                        showRightArrow: true,
-                        click: () {}),
+                    new HomeTitle(
+                      "在线题库",
+                      rightText: "我的题库",
+                      margin: EdgeInsets.only(top: 0, bottom: 0),
+                      showRightArrow: true,
+                      click: () {
+                        RouteUtils.instance.go(context, TiKu());
+                      },
+                    ),
                     new Container(
                       child: Text("经济法基础"),
                       alignment: AlignmentDirectional.center,
@@ -427,10 +417,10 @@ class _StudyPage extends State<StudyPage> {
                     new HomeTitle("最近直播",
                         rightText: "我的直播",
                         margin: EdgeInsets.only(top: 0, bottom: 0),
-                        showRightArrow: true,
-                        click: () {
-                             RouteUtils.instance.go(context, Live());
-                        }),
+                        showRightArrow: true, click: () {
+                      RouteUtils.instance.go(context, Live());
+                    }),
+                    renderLive(),
                   ],
                 ),
               ),
@@ -458,8 +448,9 @@ class _StudyPage extends State<StudyPage> {
                     if (type == 1) {
                       selectStudyResource = item;
                       //todo 保存数据
-                      SharePreferenceUtils.saveStudyClass(item.id,item.title);
+                      SharePreferenceUtils.saveStudyClass(item.id, item.title);
                       setState(() {});
+                      refresh();
                     } else if (type == 2) {
                       //
                       ToastUtils.show("跳转去课程");
@@ -475,16 +466,6 @@ class _StudyPage extends State<StudyPage> {
           ),
         ],
       ),
-    );
-  }
-
-  ///选择课程的界面
-  _buildSelectClass(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        Text("系统班级"),
-        Text("单项课程"),
-      ],
     );
   }
 

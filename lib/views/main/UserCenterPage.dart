@@ -39,7 +39,7 @@ class UserCenterPage extends StatefulWidget {
   }
 }
 
-class _UserCenterPage extends State<UserCenterPage> {
+class _UserCenterPage extends State<UserCenterPage> with AutomaticKeepAliveClientMixin {
 //  bool isLogin = false;
 
   @override
@@ -277,6 +277,10 @@ class _UserCenterPage extends State<UserCenterPage> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class Chose extends PopupMenuEntry<String> {

@@ -34,13 +34,10 @@ class Home extends StatefulWidget {
   }
 }
 
-class HomePage extends State<Home> {
+class HomePage extends State<Home> with AutomaticKeepAliveClientMixin {
   List<HomeDistribute> resultList = [];
-
   List<TiKuSubject> tikuList = [];
-
   List<PreLiveBean> preLiveList = [];
-
   List<HomeTopBar> topList = [
     HomeTopBar("精选好课", "assets/images/xuexi.png"),
     HomeTopBar("回答指南", "assets/images/wenda1.png"),
@@ -49,6 +46,9 @@ class HomePage extends State<Home> {
   ];
 
   String title = "";
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -66,10 +66,12 @@ class HomePage extends State<Home> {
     if (data.code == 200) {
       List list = data.result;
       resultList = list.map((m) => new HomeDistribute.fromJson(m)).toList();
-      setState(() {
-        resultList = resultList;
-        title = title;
-      });
+      if (mounted) {
+        setState(() {
+          resultList = resultList;
+          title = title;
+        });
+      }
     }
     return new Future.value(true);
   }
@@ -85,10 +87,12 @@ class HomePage extends State<Home> {
           map = res.result;
           List list = map['subjects'];
           tikuList = list.map((m) => TiKuSubject.fromJson(m)).toList();
-          setState(() {
-            tikuList = tikuList;
-            title = title;
-          });
+          if (mounted) {
+            setState(() {
+              tikuList = tikuList;
+              title = title;
+            });
+          }
         }
       }
     }
@@ -101,10 +105,12 @@ class HomePage extends State<Home> {
     if (response.code == 200) {
       List list = response.result;
       preLiveList = list.map((m) => new PreLiveBean.fromJson(m)).toList();
-      setState(() {
-        preLiveList = preLiveList;
-        title = title;
-      });
+      if (mounted) {
+        setState(() {
+          preLiveList = preLiveList;
+          title = title;
+        });
+      }
     }
     return new Future.value(true);
   }
