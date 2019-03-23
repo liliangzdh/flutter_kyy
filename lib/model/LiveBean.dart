@@ -1,3 +1,5 @@
+import 'package:flutterkaoyaya/common/utils.dart';
+
 class PreLiveBean {
   int mediaId;
   String picture;
@@ -14,19 +16,25 @@ class PreLiveBean {
   int access;
 
   String type = "live";
+  String title ;
+  int  number ;
 
   PreLiveBean.fromJson(Map<String, dynamic> json) {
-    mediaId = int.parse(json['mediaId']);
+    mediaId = Utils.formatInt("mediaId", json);
     picture = json['picture'];
-    expiryDay = int.parse(json['expiryDay']);
-    courseId = int.parse(json['courseId']);
+    expiryDay = Utils.formatInt("expiryDay", json);
+    courseId = Utils.formatInt("courseId", json);
     nickname = json['nickname'];
     courseTitle = json['courseTitle'];
     lessonTitle = json['lessonTitle'];
     startTime = json['start_time'];
     endTime = json['end_time'];
     category = json['category'];
-    free = int.parse(json['free']);
-    access = json['access'];
+    free = Utils.formatInt("free", json);
+    access = Utils.formatInt("access", json);
+    number = Utils.formatInt("number", json);
+    title = json['title'];
   }
+
+
 }

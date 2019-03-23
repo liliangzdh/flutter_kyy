@@ -24,11 +24,26 @@ class TimeUtils {
     return "00" + str;
   }
 
+  static String getHours(String endTimeStr){
+    try{
+      DateTime endTime  = DateTime.parse(endTimeStr);
+      return timeStr(endTime.hour, "")+":"+timeStr(endTime.minute, "");
+    }catch(e){
+
+    }
+    return "";
+  }
+
+  static String format(String startTime){
+    DateTime endTime  = DateTime.parse(startTime);
+    return "${endTime.year}:${timeStr(endTime.month, "")}:${timeStr(endTime.day, "")}  ${timeStr(endTime.hour, "")}:${timeStr(endTime.minute, "")}";
+  }
+
   static isLive(String start, String end) {
     DateTime now = DateTime.now();
     DateTime startTime = DateTime.parse(start);
     DateTime endTime = DateTime.parse(end);
-    if (now.isAfter(startTime) && now.isBefore(endTime)) {
+    if (now.isAfter(startTime)) {
       return true;
     }
     return false;

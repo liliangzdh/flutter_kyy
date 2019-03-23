@@ -458,6 +458,7 @@ class HomePage extends State<Home> {
             return new CategoryDialog();
           });
     } else {
+      await Future.delayed(Duration(seconds: 2));
       title = bean.name;
       print("--------name:>" + bean.name);
       await getUserDistribute(bean.id);
@@ -553,12 +554,6 @@ class HomePage extends State<Home> {
                     //名师直播
                     new HomeTitle("名师直播", showRightArrow: false),
                     renderLive(),
-
-                    new FlatButton(
-                        onPressed: () {
-                          goActivity();
-                        },
-                        child: Text("点击跳转"))
                   ],
                 ),
               )

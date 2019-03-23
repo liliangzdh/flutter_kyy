@@ -23,3 +23,10 @@ class TabChangeEvent {
   int index;
   TabChangeEvent(this.index);
 }
+
+
+class RefreshPlayBackEvent {
+  int classId;
+  int courseId;
+  RefreshPlayBackEvent(this.classId,this.courseId);
+}

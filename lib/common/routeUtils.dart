@@ -85,6 +85,10 @@ class RouteUtils {
     bool isLogin = appStateBloc.value.isLogin;
     bool access = (free + accessCode) > 0;
     bool isStart = Utils.isLiveStarted(startTime);
+    print("------------isStart:"+isStart.toString());
+    print("------------access:"+access.toString());
+    print("------------free:"+free.toString());
+    print("------------accessCode:"+accessCode.toString());
     if (access && isStart) {
       if (isLogin) {
         LiveMicroSrv.getAccessToken(mediaId.toString())

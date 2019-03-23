@@ -1,3 +1,5 @@
+import 'package:flutterkaoyaya/common/utils.dart';
+
 class Category {
   int id;
   String name;
@@ -20,11 +22,20 @@ class TopCate {
 
   bool isSelect = false;
 
+
+  int type;  //0 为班级 1位课程，
+
   TopCate(this.id,this.name);
 
 
-  TopCate.fromJson(Map<String, dynamic> json) {
-    id = int.parse(json['id']);
+
+  TopCate.fromJson(Map<String, dynamic> json,int type) {
+    id = Utils.formatInt("id", json);
     name = json['name'];
+    this.type = type;
+    if(name==null || name.length == 0){
+      //在
+      name = json['title'];
+    }
   }
 }

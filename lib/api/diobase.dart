@@ -60,7 +60,7 @@ class ApiManager {
 
   ///发送请求
   Future<AppResponse> send(Map<String, dynamic> map,
-      {Map<String, String> params}) async {
+      {Map<String, dynamic> params}) async {
     var url = map['url'];
     var method = map['method'];
     bool isFormData = map['form'];

@@ -236,15 +236,30 @@ class _LiveTip extends State<LiveTip> {
   }
 
   getToken() async {
-    AppResponse app = await LiveMicroSrv.getAccessToken(widget.liveId.toString());
+    AppResponse app =
+        await LiveMicroSrv.getAccessToken(widget.liveId.toString());
     if (app.code == 200) {
-      accessToken = app.result;
+      accessToken = app.result['accessToken'];
+      liveState =
+          TimeUtils.judgeState(appStateBloc.value.isLogin, liveInfo.startTime);
+    }else if(app.code == 406){
+      liveState = LiveTipStateEnum.notBuy;
+    }else if(app.code == 407){
+      liveState = LiveTipStateEnum.outOfService;
+    }else if(app.code == 401){
+      liveState = LiveTipStateEnum.liveNotStart;
+    }else if(app.code == 405){
+      liveState = LiveTipStateEnum.liveNotStart;
     }
-    liveState =
-        TimeUtils.judgeState(appStateBloc.value.isLogin, liveInfo.startTime);
+
     setState(() {
       liveState = liveState;
       liveInfo = liveInfo;
     });
+    //如果有权限，
+    if (liveState.routeName == "live") {
+      //立即进去 直播
+      RouteUtils.instance.goNowLive(accessToken, liveInfo.title);
+    }
   }
 }

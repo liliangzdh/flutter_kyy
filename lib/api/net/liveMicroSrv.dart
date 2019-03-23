@@ -12,4 +12,31 @@ class LiveMicroSrv {
     return ApiManager.instance
         .send({"url": '/new/api/live/getAccessToken'}, params: {"id": liveID});
   }
+
+  ///获取我的直播回放的班级id和课程id
+  static Future<AppResponse> getLiveIdAndClassIdByReplayLive() {
+    return ApiManager.instance
+        .send({"url": '/api/v1/users/getLiveIdAndClassIdByReplayLive'});
+  }
+
+  ///获取我的直播预告
+  static Future<AppResponse> getMyPreLive() {
+    return ApiManager.instance.send(
+      {"url": '/api/v1/users/preLive'},
+    );
+  }
+
+  ///获取我的直播回放
+  static Future<AppResponse> getMyPlaybackLive(
+      int page, int pageSize, int sortCourse, int sortClassroom) {
+    return ApiManager.instance.send({
+      "url": '/api/v1/users/replayLive',
+      "method":"post",
+    }, params: {
+      "page": page,
+      "pageSize": pageSize,
+      "sortCourse": sortCourse,
+      "sortClassroom": sortClassroom
+    });
+  }
 }

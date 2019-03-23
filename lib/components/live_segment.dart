@@ -76,7 +76,11 @@ class _LiveSegmentHead extends State<LiveSegmentHead> {
                 left: Utils.getScreenWidth(context) / 2 - 80 - 90),
             child: _buildButton(),
           ),
-          _buildRight(),
+          selectFirst
+              ? Container(
+                  width: 80,
+                )
+              : _buildRight(),
         ],
       ),
     );
@@ -154,12 +158,12 @@ class _LiveSegmentHead extends State<LiveSegmentHead> {
               margin: EdgeInsets.only(left: selectFirst ? 0 : 80),
               child: Text(
                 selectFirst ? "直播" : "回放",
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
               width: 100,
               height: height,
               decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: ColorConfig.baseColorPrime,
                   borderRadius: BorderRadius.all(Radius.circular(height / 2))),
             ),
           ],

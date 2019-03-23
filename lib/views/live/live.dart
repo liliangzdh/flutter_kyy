@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutterkaoyaya/api/net/liveMicroSrv.dart';
+import 'package:flutterkaoyaya/common/Toast.dart';
 import 'package:flutterkaoyaya/components/MyAppBar.dart';
 import 'package:flutterkaoyaya/components/live_segment.dart';
+import 'package:flutterkaoyaya/dialog/live_filter_dialog.dart';
 import 'package:flutterkaoyaya/evenbus/event.dart';
+import 'package:flutterkaoyaya/model/Category.dart';
+import 'package:flutterkaoyaya/model/app_response.dart';
 import 'package:flutterkaoyaya/model/tab_title.dart';
 import 'package:flutterkaoyaya/views/live/page/playBack_live.dart';
 import 'package:flutterkaoyaya/views/live/page/recent_live.dart';
@@ -52,15 +57,40 @@ class _Live extends State<Live> {
     }
   }
 
+  int selectIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: LiveSegmentHead(
         function: (int index) {
           mController.animateTo(index); //
         },
-        rightClick: () {},
+        rightClick: () {
+          showDialog(
+              context: context, //BuildContext对象
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return LiveFilterSelectDialog(
+                  index: selectIndex,
+                  onPress: (int i, TopCate topCate) {
+                    selectIndex = i;
+
+                    int classId = 0;
+                    int courseId = 0;
+                    if (topCate.type == 0) {
+                      //班级
+                      classId = topCate.id;
+                    } else if (topCate.type == 1) {
+                      //课程
+                      courseId = topCate.id;
+                    }
+
+                    eventBus.fire(new RefreshPlayBackEvent(classId,courseId));
+                  },
+                );
+              });
+        },
       ),
       body: Container(
         child: Column(

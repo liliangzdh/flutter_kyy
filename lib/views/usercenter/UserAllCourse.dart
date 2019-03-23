@@ -49,7 +49,7 @@ class _UserAllCourse extends State<UserAllCourse> {
       List<BroadCastingVideo> videoList =
           list.map((m) => new BroadCastingVideo.fromJson(m)).toList();
 
-      topCateList = topList.map((m) => new TopCate.fromJson(m)).toList();
+      topCateList = topList.map((m) => new TopCate.fromJson(m,0)).toList();
       topCateList.insert(0, new TopCate(0, "全部"));
       setState(() {
         resultList = videoList;
@@ -77,46 +77,6 @@ class _UserAllCourse extends State<UserAllCourse> {
                     initNet(topCateList[index].id);
                   });
                 });
-
-//            Navigator.of(context).push(TutorialOverlay());
-
-//            Navigator.of(context).push<Widget>(PageRouteBuilder<Widget>(
-//                opaque: true,
-//                pageBuilder: (BuildContext context, _, __) {
-//                  return Container(
-//                    child: Column(
-//                      mainAxisAlignment: MainAxisAlignment.start,
-//                      crossAxisAlignment: CrossAxisAlignment.start,
-//                      children: <Widget>[
-//                        new Container(
-//                          height: Utils.getStateBarHeight(context),
-//                          color: Colors.white,
-//                        ),
-//                        new Container(
-//                          height: 56,
-//                          color: Colors.red.withOpacity(0.1),
-//                        ),
-//
-//
-//                        new Container(
-//                          color: Colors.white,
-//                          width: Utils.getScreenWidth(context),
-//                          alignment: AlignmentDirectional.center,
-//                          child: new Text(
-//                            "asas",
-//                            style: TextStyle(
-//                              fontSize: 18,
-//                              decoration: TextDecoration.none,
-//                              color: ColorConfig.color66,
-//                            ),
-//                          ),
-//                          height: 30,
-//                        )
-//                      ],
-//                    ),
-//                    color: Colors.red.withOpacity(0.0),
-//                  );
-//                }));
           },
           color: Colors.white,
           clipBehavior: Clip.none,
