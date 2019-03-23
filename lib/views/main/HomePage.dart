@@ -53,7 +53,7 @@ class HomePage extends State<Home> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-
+    print("------home init");
     this._onRefresh();
     //只监听DrawerEvent。
     eventBus.on<DrawerEvent>().listen((DrawerEvent event) {
@@ -491,7 +491,10 @@ class HomePage extends State<Home> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    // 猛一看效果出来了，左右切换界面没有问题，结果跳转新界面时又出现新问题，
+    // 当第一页跳转新的界面再返回，再切第二、三页发现重置了，再切回第一页发现页被重置了。
+    //发生这种情况需要在重写Widget build(BuildContext context)时调用下父类
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

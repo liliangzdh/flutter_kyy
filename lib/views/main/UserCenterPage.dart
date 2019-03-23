@@ -236,6 +236,7 @@ class _UserCenterPage extends State<UserCenterPage> with AutomaticKeepAliveClien
 //  )
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,

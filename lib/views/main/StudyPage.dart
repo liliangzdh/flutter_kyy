@@ -471,6 +471,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return StreamBuilder(
       stream: appStateBloc.stream,
       initialData: appStateBloc.value,
