@@ -40,4 +40,10 @@ class UserInfoSrv {
     return ApiManager.instance.netFetch({"url": '/api/v1/users/studyResource'});
   }
 
+  ///获取分发的题库
+  static Future<AppResponse> getDistributeSubject(String id) async{
+    return ApiManager.instance.netFetch({"url": '/api/v1/distribute/subject'},params:{ "examType": id,});
+  }
+
+
 }

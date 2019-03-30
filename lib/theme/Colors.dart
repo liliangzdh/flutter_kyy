@@ -17,4 +17,5 @@ class ColorConfig {
   static const Color color20 = Color(0xFF2099C7);
   static const Color color01 = Color(0xFF0178ff);
   static const Color color6a = Color(0xFF6a9afe);
+  static const Color color60 = Color(0xFF6095FC);
 }

@@ -5,6 +5,9 @@ class TiKuSubject {
   int parentID;
   int isSprintOpen;
 
+
+  TiKuSubject(this.name);
+
   TiKuSubject.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];

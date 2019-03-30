@@ -9,6 +9,7 @@ import 'package:flutterkaoyaya/common/timeutils.dart';
 import 'package:flutterkaoyaya/components/loading.dart';
 import 'package:flutterkaoyaya/dialog/LoadingDialog.dart';
 import 'package:flutterkaoyaya/enum/liveTipState.dart';
+import 'package:flutterkaoyaya/evenbus/event.dart';
 import 'package:flutterkaoyaya/model/LiveBean.dart';
 import 'package:flutterkaoyaya/model/app_response.dart';
 import 'package:flutterkaoyaya/model/live_info.dart';
@@ -38,6 +39,9 @@ class _LiveTip extends State<LiveTip> {
     // TODO: implement initState
     super.initState();
     init();
+    eventBus.on<LoginEvent>().listen((LoginEvent event) {
+      init();
+    });
   }
 
   Timer _timer;
@@ -228,6 +232,10 @@ class _LiveTip extends State<LiveTip> {
     AppResponse app = await LiveSrv.getLiveInfo(widget.liveId.toString());
     if (app.code != 200) {
       ToastUtils.show(app.msg);
+      setState(() {
+        liveState =  LiveTipStateEnum.noNet;
+        liveInfo= new LiveInfo();
+      });
       return;
     }
     liveInfo = LiveInfo.fromJson(app.result);

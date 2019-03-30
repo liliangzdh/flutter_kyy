@@ -71,6 +71,13 @@ flutter:
     - assets/images/xuexi.png
     - assets/images/launchimg.png
     - assets/images/kaoyaya.png
+    - assets/images/ChapterExercise.png
+    - assets/images/classHomework.png
+    - assets/images/yatijuan.png
+    - assets/images/yiCuoTi.png
+    - assets/images/zhentijuan.png
+    - assets/images/zhisidian.png
+    - assets/images/vip.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

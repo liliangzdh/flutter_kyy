@@ -21,7 +21,7 @@ class ApiManager {
     dio = new Dio();
     // 配置dio实例
     dio.options.baseUrl = Api.BASE_URL;
-    dio.options.connectTimeout = 10000; //5s
+    dio.options.connectTimeout = 5000; //5s
     dio.options.receiveTimeout = 3000;
     dio.options.headers.addAll({"Origin": Api.BASE_URL});
     dio.options.headers.addAll({"User-Agent": "IOS/WEBVIEW"});
@@ -67,9 +67,6 @@ class ApiManager {
     Response response;
 
     String token = await SharePreferenceUtils.getToken();
-
-    print(
-        "-----------token:${(token != null && token.length > 0) ? token : '不存在'}");
     if (token != null && token.length > 0) {
       dio.options.headers.addAll({"x-token": token});
     }
@@ -90,7 +87,7 @@ class ApiManager {
 
       AppResponse app;
       if (response.statusCode == HttpStatus.ok) {
-        print("返回的数据1：------${response.data}");
+        print("response:${response.data}");
         app = new AppResponse.fromJson(response.data);
       } else {
         app = new AppResponse(response.statusCode, "获取数据错误", null);

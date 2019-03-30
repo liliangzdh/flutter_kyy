@@ -4,7 +4,10 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutterkaoyaya/api/net/liveMicroSrv.dart';
 import 'package:flutterkaoyaya/common/Toast.dart';
 import 'package:flutterkaoyaya/common/utils.dart';
+import 'package:flutterkaoyaya/config/config.dart';
 import 'package:flutterkaoyaya/model/app_response.dart';
+import 'package:flutterkaoyaya/model/practice_record.dart';
+import 'package:flutterkaoyaya/model/tiku_statistic.dart';
 import 'package:flutterkaoyaya/provide/single_global_instance/appstate_bloc.dart';
 import 'package:flutterkaoyaya/store/share_preferences.dart';
 import 'package:flutterkaoyaya/views/WebView.dart';
@@ -85,10 +88,10 @@ class RouteUtils {
     bool isLogin = appStateBloc.value.isLogin;
     bool access = (free + accessCode) > 0;
     bool isStart = Utils.isLiveStarted(startTime);
-    print("------------isStart:"+isStart.toString());
-    print("------------access:"+access.toString());
-    print("------------free:"+free.toString());
-    print("------------accessCode:"+accessCode.toString());
+    print("------------isStart:" + isStart.toString());
+    print("------------access:" + access.toString());
+    print("------------free:" + free.toString());
+    print("------------accessCode:" + accessCode.toString());
     if (access && isStart) {
       if (isLogin) {
         LiveMicroSrv.getAccessToken(mediaId.toString())
@@ -114,11 +117,45 @@ class RouteUtils {
   }
 
   //直播去直播
-  goNowLive(String accessToken,String title ){
+  goNowLive(String accessToken, String title) {
     FlutterKaoyayaPlugin.live({
       "accessToken": accessToken,
       "title": title,
       "type": "live" //live
     });
+  }
+
+  goWebViewCheckLogin(BuildContext context, String url, needAddHttpHeader) {
+    bool isLogin = appStateBloc.value.isLogin;
+    if (isLogin) {
+      goWebView(context, needAddHttpHeader ? Api.BASE_URL + url : url);
+    } else {
+      goLogin(context);
+    }
+  }
+
+  void tiKuKeepOn(BuildContext context,TiKuStatistic tiKuStatistic) {
+    PracticeRecord practiceRecord = tiKuStatistic.practiceRecord;
+    if (practiceRecord.practiceID == 0) {
+      ToastUtils.show("暂无学习记录");
+    } else {
+      String url;
+      switch (practiceRecord.practiceType) {
+        case 1: //章节
+        case 2: //节练习
+        case 3: //知识点
+          url =
+              "/tiku/wap/chapter?chapterType=${practiceRecord.practiceType}&practiceMode=${practiceRecord.practiceMode}&id=${practiceRecord.practiceID}";
+          break;
+        case 4: //模拟试卷
+          url = "/tiku/wap/exam?examID=${practiceRecord.practiceID}";
+          break;
+        case 5: //班级作业
+          url =
+              "/tiku/wap/exam?examID=${practiceRecord.practiceID}&practiceMode=2";
+          break;
+      }
+      goWebViewCheckLogin(context, url, true);
+    }
   }
 }
