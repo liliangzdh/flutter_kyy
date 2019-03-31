@@ -68,6 +68,7 @@ class ApiManager {
 
     String token = await SharePreferenceUtils.getToken();
     if (token != null && token.length > 0) {
+      print("-----token"+token);
       dio.options.headers.addAll({"x-token": token});
     }
 
@@ -97,12 +98,11 @@ class ApiManager {
       print("---------dio error ");
       print(err.toString());
 
-      AppResponse appResponse = new AppResponse(900, "连接不上网络", null);
+      AppResponse appResponse = new AppResponse(900, "连接不上网络:"+err.message, null);
       if (err.response != null) {
         var resData = err.response.data;
         print("------------->虽然异常了，但是还是有返回的:" + resData.toString());
-      } else {}
-
+      }
       if (err.type == DioErrorType.CONNECT_TIMEOUT) {
         appResponse = new AppResponse(
             HttpStatus.networkConnectTimeoutError, "连接超时", null);

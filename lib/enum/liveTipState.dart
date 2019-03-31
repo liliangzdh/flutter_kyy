@@ -1,11 +1,11 @@
 class LiveState {
-  String topTip;
-  int code;
-  String countDownTip;
-  String bottomTip;
-  String backTo;
-  String routeName;
-  bool isPreLive;
+  String topTip="";
+  int code=0;
+  String countDownTip="";
+  String bottomTip="";
+  String backTo="";
+  String routeName="";
+  bool isPreLive=false;
 
   LiveState(this.topTip, this.code, this.countDownTip, this.bottomTip,
       this.backTo, this.routeName, this.isPreLive);

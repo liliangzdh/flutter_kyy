@@ -47,7 +47,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
   StudyResource selectStudyResource = StudyResource(0, "");
   List<StudyLearnInfo> studyLearnInfoList;
 
-  PracticeRecord practiceRecord;
+  PracticeRecord practiceRecord = PracticeRecord();
 
   List<TiKuSubject> subjectList = [];
 
@@ -347,7 +347,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
         height: 40,
         alignment: AlignmentDirectional.center,
         child: Text(
-          "暂无题库",
+          "暂无直播",
           style: TextStyle(fontSize: 30, color: ColorConfig.color99),
         ),
       );
@@ -470,6 +470,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
                         showRightArrow: true, click: () {
                       RouteUtils.instance.go(context, Live());
                     }),
+                    ///构建直播列表
                     renderLive(),
                   ],
                 ),

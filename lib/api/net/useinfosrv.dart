@@ -6,9 +6,6 @@ import '../../model/app_response.dart';
 
 class UserInfoSrv {
 
-
-
-
   ///是否登录
   static Future<AppResponse> checkLogin() async {
     return ApiManager.instance.netFetch({"url": '/api/v1/login/isLogin'},params: null);

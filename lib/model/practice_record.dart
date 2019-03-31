@@ -1,8 +1,11 @@
 class PracticeRecord {
-  int subjectID;
-  int practiceType;
-  int practiceID;
-  int practiceMode;
+  int subjectID=0;
+  int practiceType=0;
+  int practiceID=0;
+  int practiceMode=0;
+
+
+  PracticeRecord();
 
   PracticeRecord.fromJson(Map<String, dynamic> map) {
     subjectID = map['subjectID'];

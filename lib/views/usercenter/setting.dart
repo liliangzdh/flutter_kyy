@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterkaoyaya/api/net/loginSrv.dart';
 import 'package:flutterkaoyaya/store/share_preferences.dart';
 import 'package:package_info/package_info.dart';
 import '../../provide/single_global_instance/appstate.dart';
@@ -54,9 +55,7 @@ class _Setting extends State<Setting> {
                       constraints: BoxConstraints.expand(),
                       child: new FlatButton(
                           onPressed: () {
-                            appStateBloc.logout();
-                            SharePreferenceUtils.saveToken("");
-                            SharePreferenceUtils.saveStudyClass(0,"");
+                            mLogin();
                           },
                           child: new Text("退出登录",
                               style: TextStyle(fontSize: 18)))),
@@ -72,5 +71,12 @@ class _Setting extends State<Setting> {
       ),
       backgroundColor: ColorConfig.colorEf,
     );
+  }
+
+  mLogin() async {
+    await LoginSrv.mLogout();
+    appStateBloc.logout();
+    SharePreferenceUtils.saveToken("");
+    SharePreferenceUtils.saveStudyClass(0, "");
   }
 }

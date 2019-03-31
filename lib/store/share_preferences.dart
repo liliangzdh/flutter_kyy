@@ -24,7 +24,7 @@ class SharePreferenceUtils {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int id = await preferences.get("class_id");
     if (id == null) {
-      return null;
+      return StudyResource(0, "");
     }
     String title = await preferences.get("class_title");
     return StudyResource(id, title);

@@ -1,10 +1,10 @@
 
 
 class StudyResource {
-  int id;
-  String title;
-  String courseType;
-  int subjectID;
+  int id=0;
+  String title="";
+  String courseType="";
+  int subjectID=0;
 
 
   StudyResource(this.id, this.title);

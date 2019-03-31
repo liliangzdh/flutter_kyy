@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutterkaoyaya/api/net/liveMicroSrv.dart';
 import 'package:flutterkaoyaya/api/net/live_srv.dart';
+import 'package:flutterkaoyaya/api/net/useinfosrv.dart';
 import 'package:flutterkaoyaya/common/Toast.dart';
 import 'package:flutterkaoyaya/common/routeUtils.dart';
 import 'package:flutterkaoyaya/common/timeutils.dart';
@@ -30,9 +31,10 @@ class LiveTip extends StatefulWidget {
 }
 
 class _LiveTip extends State<LiveTip> {
-  LiveInfo liveInfo;
 
-  LiveState liveState;
+
+  LiveInfo liveInfo;
+  LiveState liveState ;
 
   @override
   void initState() {
@@ -40,7 +42,9 @@ class _LiveTip extends State<LiveTip> {
     super.initState();
     init();
     eventBus.on<LoginEvent>().listen((LoginEvent event) {
-      init();
+      if(mounted){
+        init();
+      }
     });
   }
 
@@ -86,7 +90,7 @@ class _LiveTip extends State<LiveTip> {
   }
 
   _buildBody() {
-    if (liveInfo == null || liveState == null) {
+    if (liveInfo == null && liveState == null) {
       return Loading();
     }
     return Container(
@@ -256,7 +260,7 @@ class _LiveTip extends State<LiveTip> {
       liveState = LiveTipStateEnum.outOfService;
     }else if(app.code == 401){
       liveState = LiveTipStateEnum.liveNotStart;
-    }else if(app.code == 405){
+    }else{
       liveState = LiveTipStateEnum.liveNotStart;
     }
 
