@@ -23,6 +23,8 @@ class LiveTip extends StatefulWidget {
 
   LiveTip(this.liveId);
 
+  bool isLoading = true;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -31,10 +33,10 @@ class LiveTip extends StatefulWidget {
 }
 
 class _LiveTip extends State<LiveTip> {
+  LiveInfo liveInfo = LiveInfo();
+  LiveState liveState = LiveTipStateEnum.loading ;
 
-
-  LiveInfo liveInfo;
-  LiveState liveState ;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -42,7 +44,7 @@ class _LiveTip extends State<LiveTip> {
     super.initState();
     init();
     eventBus.on<LoginEvent>().listen((LoginEvent event) {
-      if(mounted){
+      if (mounted) {
         init();
       }
     });
@@ -89,73 +91,79 @@ class _LiveTip extends State<LiveTip> {
     });
   }
 
+  _buildLoading() {
+    return Loading(this.isLoading);
+  }
+
   _buildBody() {
-    if (liveInfo == null && liveState == null) {
-      return Loading();
-    }
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Padding(
-            child: Text(
-              liveInfo.courseName,
-              style: TextStyle(
-                fontSize: 18,
+    return Stack(
+      children: <Widget>[
+        Container(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                child: Text(
+                  liveInfo.courseName,
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                padding: EdgeInsets.only(top: 20),
               ),
-            ),
-            padding: EdgeInsets.only(top: 20),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 14, bottom: 14),
-            child: Text(
-              liveInfo.title,
-              style: TextStyle(
-                color: ColorConfig.color20,
-                fontSize: 18,
+              Padding(
+                padding: EdgeInsets.only(top: 14, bottom: 14),
+                child: Text(
+                  liveInfo.title,
+                  style: TextStyle(
+                    color: ColorConfig.color20,
+                    fontSize: 18,
+                  ),
+                ),
               ),
-            ),
-          ),
-          _buildImage(),
-          Padding(
-            child: Text(
-              "${liveInfo.nickname} ${liveInfo.startTime}",
-              style: TextStyle(
-                color: ColorConfig.color88,
-                fontSize: 16,
+              _buildImage(),
+              Padding(
+                child: Text(
+                  "${liveInfo.nickname} ${liveInfo.startTime}",
+                  style: TextStyle(
+                    color: ColorConfig.color88,
+                    fontSize: 16,
+                  ),
+                ),
+                padding: EdgeInsets.only(top: 5),
               ),
-            ),
-            padding: EdgeInsets.only(top: 5),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Text(
-              time,
-              style: TextStyle(fontSize: 30),
-            ),
-          ),
-          Text(
-            liveState.countDownTip,
-            style: TextStyle(
-              color: ColorConfig.color99,
-              fontSize: 16,
-            ),
-          ),
-          Expanded(
-            child: Container(),
-          ),
-          Padding(
-            child: Text(
-              liveState.bottomTip,
-              style: TextStyle(
-                color: ColorConfig.color20,
-                fontSize: 16,
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  time,
+                  style: TextStyle(fontSize: 30),
+                ),
               ),
-            ),
-            padding: EdgeInsets.only(bottom: 4),
+              Text(
+                liveState.countDownTip,
+                style: TextStyle(
+                  color: ColorConfig.color99,
+                  fontSize: 16,
+                ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              Padding(
+                child: Text(
+                  liveState.bottomTip,
+                  style: TextStyle(
+                    color: ColorConfig.color20,
+                    fontSize: 16,
+                  ),
+                ),
+                padding: EdgeInsets.only(bottom: 4),
+              ),
+              _buildBottom(),
+            ],
           ),
-          _buildBottom(),
-        ],
-      ),
+        ),
+        _buildLoading()
+      ],
     );
   }
 
@@ -233,12 +241,14 @@ class _LiveTip extends State<LiveTip> {
   String accessToken = "";
 
   void init() async {
+    isLoading = true;
     AppResponse app = await LiveSrv.getLiveInfo(widget.liveId.toString());
     if (app.code != 200) {
       ToastUtils.show(app.msg);
+      isLoading = false;
       setState(() {
-        liveState =  LiveTipStateEnum.noNet;
-        liveInfo= new LiveInfo();
+        liveState = LiveTipStateEnum.noNet;
+        liveInfo = new LiveInfo();
       });
       return;
     }
@@ -254,16 +264,16 @@ class _LiveTip extends State<LiveTip> {
       accessToken = app.result['accessToken'];
       liveState =
           TimeUtils.judgeState(appStateBloc.value.isLogin, liveInfo.startTime);
-    }else if(app.code == 406){
+    } else if (app.code == 406) {
       liveState = LiveTipStateEnum.notBuy;
-    }else if(app.code == 407){
+    } else if (app.code == 407) {
       liveState = LiveTipStateEnum.outOfService;
-    }else if(app.code == 401){
+    } else if (app.code == 401) {
       liveState = LiveTipStateEnum.liveNotStart;
-    }else{
+    } else {
       liveState = LiveTipStateEnum.liveNotStart;
     }
-
+    isLoading = false;
     setState(() {
       liveState = liveState;
       liveInfo = liveInfo;

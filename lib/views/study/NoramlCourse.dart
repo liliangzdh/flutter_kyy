@@ -5,6 +5,7 @@ import 'package:flutterkaoyaya/api/net/StudySrv.dart';
 import 'package:flutterkaoyaya/common/Toast.dart';
 import 'package:flutterkaoyaya/common/routeUtils.dart';
 import 'package:flutterkaoyaya/common/utils.dart';
+import 'package:flutterkaoyaya/components/loading.dart';
 import 'package:flutterkaoyaya/evenbus/event.dart';
 import 'package:flutterkaoyaya/model/app_response.dart';
 import 'package:flutterkaoyaya/model/course_info.dart';
@@ -41,6 +42,7 @@ class _NormalCourse extends State<NormalCourse> {
   LessonInfo lessonInfo; //当前学习的lesson;
 
   bool showVideo = false; //是否是播放视频
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -57,7 +59,6 @@ class _NormalCourse extends State<NormalCourse> {
       //TabBar的监听
       if (mController.indexIsChanging) {
         //判断TabBar是否切换
-        print(mController.index);
         onPageChange(mController.index, p: mPageController);
       }
     });
@@ -228,56 +229,68 @@ class _NormalCourse extends State<NormalCourse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          _buildVideo(),
-          Container(
-            color: new Color(0xfff4f5f6),
-            height: 38.0,
-            child: TabBar(
-              isScrollable: false,
-              controller: mController,
-              labelColor: ColorConfig.baseColorPrime,
-              unselectedLabelColor: Color(0xff666666),
-              indicatorWeight: 3,
-              labelStyle: TextStyle(fontSize: 16.0),
-              tabs: tabList.map((item) {
-                return Tab(
-                  text: item.title,
-                );
-              }).toList(),
+      body: Stack(children: <Widget>[
+        Column(
+          children: <Widget>[
+            _buildVideo(),
+            Container(
+              color: new Color(0xfff4f5f6),
+              height: 38.0,
+              child: TabBar(
+                isScrollable: false,
+                controller: mController,
+                labelColor: ColorConfig.baseColorPrime,
+                unselectedLabelColor: Color(0xff666666),
+                indicatorWeight: 3,
+                labelStyle: TextStyle(fontSize: 16.0),
+                tabs: tabList.map((item) {
+                  return Tab(
+                    text: item.title,
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-          Expanded(
-            child: PageView(
-              onPageChanged: (int index) {
-                if (isPageCanChanged) {
-                  //由于pageview切换是会回调这个方法,又会触发切换tabbar的操作,所以定义一个flag,控制pageview的回调
-                  onPageChange(index);
-                }
-              },
-              controller: mPageController,
-              children: <Widget>[
-                NormalCourseList(lessonList, courseInfo,
-                    lessonStudyOnPress: (LessonInfoItem lessonInfoItem) {
-                  study(lessonInfoItem.status, lessonInfoItem.id,
-                      lessonInfoItem.lessonType, lessonInfoItem.target);
-                }),
-                NormalCourseComment(),
-              ],
-            ),
-          )
-        ],
-      ),
+            Expanded(
+              child: PageView(
+                onPageChanged: (int index) {
+                  if (isPageCanChanged) {
+                    //由于pageview切换是会回调这个方法,又会触发切换tabbar的操作,所以定义一个flag,控制pageview的回调
+                    onPageChange(index);
+                  }
+                },
+                controller: mPageController,
+                children: <Widget>[
+                  NormalCourseList(lessonList, courseInfo,
+                      lessonStudyOnPress: (LessonInfoItem lessonInfoItem) {
+                        study(lessonInfoItem.status, lessonInfoItem.id,
+                            lessonInfoItem.lessonType, lessonInfoItem.target);
+                      }),
+                  NormalCourseComment(),
+                ],
+              ),
+            )
+          ],
+
+        ),
+        _buildLoading()
+      ],),
       backgroundColor: Colors.white,
     );
   }
 
-  void initNet() async {
-    AppResponse appResponse = await StudySrv.getCourseInfo(widget.courseID);
+  _buildLoading(){
+    return Loading(isLoading);
+  }
 
+  void initNet() async {
+    isLoading = true;
+    AppResponse appResponse = await StudySrv.getCourseInfo(widget.courseID);
     if(appResponse.code != 200){
       ToastUtils.show(appResponse.msg);
+      isLoading = false;
+      setState(() {
+
+      });
       return;
     }
 
@@ -345,6 +358,7 @@ class _NormalCourse extends State<NormalCourse> {
       }
       //以前读取的默认选中
     }
+    isLoading = false;
     setState(() {});
 
     //获取数据成功之后，自动滚动到自动位置

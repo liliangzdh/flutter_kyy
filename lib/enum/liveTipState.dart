@@ -21,5 +21,6 @@ class LiveTipStateEnum {
   static final outOfService = LiveState("小呀开小差了", 407, "已开始", '小呀开小差，请再试一次', "立即刷新", "home", false);
   static final getinLive = LiveState("直播已经开始", 200, "", '直播已经开始，就等你来了', "立即进入", "live", false);
   static final noNet = LiveState("没有网络", 400, "", '链接不上服务器', "立即进入", "立即刷新", false);
+  static final loading = LiveState("正在加载", 400, "", '正在连接...', "", "home", false);
 }
 

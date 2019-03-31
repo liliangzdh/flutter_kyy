@@ -20,6 +20,7 @@ class _RecentLive extends State<RecentLive> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
   List<PreLiveBean> preLiveList = [];
 
+  bool isLoading = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -35,11 +36,16 @@ class _RecentLive extends State<RecentLive> with AutomaticKeepAliveClientMixin {
     AppResponse response = await LiveMicroSrv.getMyPreLive();
     if (response.code != 200) {
       ToastUtils.show(response.msg);
+      isLoading = false;
+      setState(() {
+
+      });
       return;
     }
     List list = response.result;
     preLiveList = list.map((m) => new PreLiveBean.fromJson(m)).toList();
     if (mounted) {
+      isLoading = false;
       setState(() {
         preLiveList = preLiveList;
       });
@@ -54,29 +60,27 @@ class _RecentLive extends State<RecentLive> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-
-    if (preLiveList.length==0) {
-      return Loading();
-    }
-
-    return new Container(
-      color: Color(0XFFeef0f5),
-      child: RefreshIndicator(
-          child: ListView.builder(
-            itemBuilder: (content, index) {
-              PreLiveBean bean = preLiveList[index];
-              return MyPreLiveItem(
-                bean: bean,
-                function: (PreLiveBean dat) {
-                  RouteUtils.instance.goLive2(context, bean.access,
-                      bean.startTime, bean.free, bean.mediaId, "live");
-                },
-              );
-            },
-            itemCount: preLiveList.length,
-            padding: EdgeInsets.all(10),
-          ),
-          onRefresh: _onRefresh),
-    );
+    return Stack(children: <Widget>[
+      new Container(
+        color: Color(0XFFeef0f5),
+        child: RefreshIndicator(
+            child: ListView.builder(
+              itemBuilder: (content, index) {
+                PreLiveBean bean = preLiveList[index];
+                return MyPreLiveItem(
+                  bean: bean,
+                  function: (PreLiveBean dat) {
+                    RouteUtils.instance.goLive2(context, bean.access,
+                        bean.startTime, bean.free, bean.mediaId, "live");
+                  },
+                );
+              },
+              itemCount: preLiveList.length,
+              padding: EdgeInsets.all(10),
+            ),
+            onRefresh: _onRefresh),
+      ),
+      Loading(isLoading)
+    ],);
   }
 }

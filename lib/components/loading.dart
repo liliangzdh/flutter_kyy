@@ -2,9 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutterkaoyaya/theme/Colors.dart';
 
 class Loading extends StatelessWidget {
+
+
+  final bool isLoading;
+  Loading(this.isLoading);
+
+
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    if (isLoading) {
+      return _buildLoading();
+    }
+    return Container();
+  }
+
+
+  _buildLoading(){
     return new Center(
       child: new SizedBox(
         width: 120,

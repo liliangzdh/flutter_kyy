@@ -11,7 +11,7 @@ class CourseInfo {
   String oem;
   String picture;
   double price;
-  int studentNum;
+  int studentNum=0;
   String subtitle;
   String title ="";
   String url;
