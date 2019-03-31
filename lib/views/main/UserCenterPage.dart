@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kaoyaya_plugin/flutter_kaoyaya_plugin.dart';
 import 'package:flutterkaoyaya/common/routeUtils.dart';
+import 'package:flutterkaoyaya/dialog/modify_user_name_Dialog.dart';
 import '../../provide/single_global_instance/appstate.dart';
 import '../../views/usercenter/setting.dart';
 import '../../dialog/LoadingDialog.dart';
@@ -12,25 +13,6 @@ import '../../model/userinfo.dart';
 import '../../provide/single_global_instance/appstate_bloc.dart';
 import '../../config/config.dart';
 
-//new Image.network(
-//"http://chart.ydniu.com/images/11ydj.jpg",
-//width: 100,
-//height: 100,
-//),
-
-//PopupMenuButton<String>(
-//itemBuilder: (BuildContext context) => [
-//PopupMenuItem<String>(value: "asas", child: Text("asas")),
-//PopupMenuItem<String>(value: "asas", child: Text("asas")),
-//]),
-//
-//new Text(_bodyStr),
-//RaisedButton(
-//child: Text("asaas"),
-//onPressed: () {
-//showDialogText(context);
-//},
-//)
 class UserCenterPage extends StatefulWidget {
   @override
   _UserCenterPage createState() {
@@ -39,7 +21,8 @@ class UserCenterPage extends StatefulWidget {
   }
 }
 
-class _UserCenterPage extends State<UserCenterPage> with AutomaticKeepAliveClientMixin {
+class _UserCenterPage extends State<UserCenterPage>
+    with AutomaticKeepAliveClientMixin {
 //  bool isLogin = false;
 
   @override
@@ -95,7 +78,7 @@ class _UserCenterPage extends State<UserCenterPage> with AutomaticKeepAliveClien
         Line(color: ColorConfig.colorE5),
         renderCell("我的考币", Icons.memory, context),
         Line(color: ColorConfig.colorE5),
-        renderCell("直播回放缓存", Icons.print, context, onPress: (){
+        renderCell("直播回放缓存", Icons.print, context, onPress: () {
           FlutterKaoyayaPlugin.downloadList();
         }),
         Line(
@@ -152,39 +135,50 @@ class _UserCenterPage extends State<UserCenterPage> with AutomaticKeepAliveClien
     if (nickname == null || nickname.length == 0) {
       nickname = "学员";
     }
-
     return [
-      new Container(
-          padding: EdgeInsets.only(left: 10),
+      Container(
+          padding: EdgeInsets.only(left: 10,bottom: 5),
           child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Row(children: <Widget>[
-                  new Text(nickname,
-                      style: new TextStyle(color: Colors.white, fontSize: 18)),
-                  new Container(
+                new Row(
+                  children: <Widget>[
+                    Text(
+                      nickname,
+                      style: new TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    Container(
+                      height: 30,
                       margin: EdgeInsets.only(left: 16),
-                      child: new Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 14,
-                          ),
-                          new Text("修改昵称",
-                              style: new TextStyle(
-                                  color: Colors.white, fontSize: 14))
-                        ],
-                      )),
-                ]),
-                new Container(
-                    padding: EdgeInsets.only(top: 5),
-                    child: new Text(userInfo.username,
-                        style:
-                            new TextStyle(color: Colors.white, fontSize: 14)))
+                      child: FlatButton(
+                        padding: EdgeInsets.all(0),
+                        onPressed: modifyUserName,
+                        child: new Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 14,
+                            ),
+                            new Text("修改昵称",
+                                style: new TextStyle(
+                                    color: Colors.white, fontSize: 14))
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 4),
+                  child: new Text(
+                    userInfo.username,
+                    style: new TextStyle(color: Colors.white, fontSize: 14),
+                  ),
+                )
               ])),
-      Expanded(child: new Text("")),
+      Expanded(child: Container()),
       Container(
         child: new RaisedButton(
           color: ColorConfig.baseColorPrime,
@@ -209,6 +203,16 @@ class _UserCenterPage extends State<UserCenterPage> with AutomaticKeepAliveClien
     ];
   }
 
+
+  modifyUserName(){
+    showDialog(
+        context: context, //BuildContext对象
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return new ModifyUserName();
+        });
+  }
+
   renderLogin(BuildContext context, UserInfo userInfo, bool isLogin) {
     return new Container(
       color: ColorConfig.baseColorPrime,
@@ -220,24 +224,16 @@ class _UserCenterPage extends State<UserCenterPage> with AutomaticKeepAliveClien
             child:
                 new Row(children: renderTopLogin(isLogin, context, userInfo)))
       ]),
-      padding: EdgeInsets.only(bottom: 40),
+      padding: EdgeInsets.only(bottom: 30),
       height: 90,
     );
   }
 
-//  new Column(
-//  children: <Widget>[
-//  Container(
-//  child: renderList(context),
-//  padding: EdgeInsets.only(top: 10),
-//  ),
-//  Expanded(child: new Container(color: ColorConfig.colorF3)),
-//  ],
-//  )
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
           centerTitle: true,
           elevation: 0,

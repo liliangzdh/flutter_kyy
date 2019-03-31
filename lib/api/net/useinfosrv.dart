@@ -37,6 +37,11 @@ class UserInfoSrv {
     return ApiManager.instance.netFetch({"url": '/api/v1/users/studyResource'});
   }
 
+  ///修改用户信息单个字段
+  static Future<AppResponse> modifyUserField(String name) async{
+    return ApiManager.instance.netFetch({"url": '/api/v1/users/info/field',"method": "post","form":false},params:{"field": "nickname","value":name});
+  }
+
   ///获取分发的题库
   static Future<AppResponse> getDistributeSubject(String id) async{
     return ApiManager.instance.netFetch({"url": '/api/v1/distribute/subject'},params:{ "examType": id,});
