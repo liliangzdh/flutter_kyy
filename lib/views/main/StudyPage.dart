@@ -26,6 +26,7 @@ import 'package:flutterkaoyaya/store/share_preferences.dart';
 import 'package:flutterkaoyaya/views/live/live.dart';
 import 'package:flutterkaoyaya/views/main/page/study_menu.dart';
 import 'package:flutterkaoyaya/views/main/page/study_nologin.dart';
+import 'package:flutterkaoyaya/views/study/NoramlCourse.dart';
 import 'package:flutterkaoyaya/views/tiku/tiku.dart';
 import 'package:flutterkaoyaya/views/usercenter/UserAllCourse.dart';
 import '../../theme/Colors.dart';
@@ -99,7 +100,6 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
         await ClassroomMicroSrv.learnInfo(selectStudyResource.id);
 
     if (appResponse.code == 200) {
-
       manageModule = appResponse.result['class']['manageModule'];
       List normal = appResponse.result['normal'];
       if (normal is List) {
@@ -261,7 +261,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
       );
     }
 
-    if(manageModule != 1){
+    if (manageModule != 1) {
       return Container();
     }
 
@@ -309,7 +309,12 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
         itemCount: studyLearnInfoList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return VideoRecordItem(info: studyLearnInfoList[index]);
+          return VideoRecordItem(
+            info: studyLearnInfoList[index],
+            onPress: () {
+              RouteUtils.instance.go(context, new NormalCourse(studyLearnInfoList[index].id,Utils.getScreenWidth(context)));
+            },
+          );
         });
   }
 
@@ -434,12 +439,18 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
                     ),
 
                     ///在学课程
-                    new HomeTitle("精品体验课",
-                        rightText: "我的课程",
-                        margin: EdgeInsets.only(top: 0, bottom: 0),
-                        showRightArrow: true, click: () {
-                      RouteUtils.instance.go(context, new UserAllCourse());
-                    }),
+                    new HomeTitle(
+                      "精品体验课",
+                      rightText: "我的课程",
+                      margin: EdgeInsets.only(top: 0, bottom: 0),
+                      showRightArrow: true,
+                      click: () {
+                        RouteUtils.instance.go(
+                          context,
+                          new UserAllCourse(),
+                        );
+                      },
+                    ),
                     new Container(
                       child: new Center(child: renderClass()),
                       height: 144,
@@ -451,7 +462,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
                       "在线题库",
                       rightText: "我的题库",
                       margin: EdgeInsets.only(top: 0, bottom: 0),
-                      showRightArrow: true,
+                      showRightArrow: practiceRecord.subjectID > 0,
                       click: () {
                         RouteUtils.instance.go(context, TiKu());
                       },
@@ -470,6 +481,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
                         showRightArrow: true, click: () {
                       RouteUtils.instance.go(context, Live());
                     }),
+
                     ///构建直播列表
                     renderLive(),
                   ],
@@ -494,10 +506,10 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
       }
 
       double doneRate = tiKuStatistic.totalQuestion > 0
-          ? tiKuStatistic.doneQuestion / tiKuStatistic.totalQuestion
+          ? tiKuStatistic.doneQuestion * 100 / tiKuStatistic.totalQuestion
           : 0;
       double rightRate = tiKuStatistic.doneQuestion > 0
-          ? tiKuStatistic.rightQuestion / tiKuStatistic.doneQuestion
+          ? tiKuStatistic.rightQuestion * 100 / tiKuStatistic.doneQuestion
           : 0;
       return Column(
         children: <Widget>[
@@ -508,10 +520,10 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
           new Container(
             child: Row(
               children: <Widget>[
-                renderTiKuCell(doneRate.toString(), "完成率", "%"),
+                renderTiKuCell(doneRate.toInt().toString(), "完成率", "%"),
                 renderTiKuCell(
                     tiKuStatistic.doneQuestion.toString(), "做题总数", "道"),
-                renderTiKuCell(rightRate.toString(), "正确率", "%"),
+                renderTiKuCell(rightRate.toInt().toString(), "正确率", "%"),
               ],
             ),
           ),

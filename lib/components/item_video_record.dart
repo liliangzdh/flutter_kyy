@@ -5,7 +5,8 @@ import 'package:flutterkaoyaya/theme/Colors.dart';
 class VideoRecordItem extends StatelessWidget{
 
   final StudyLearnInfo info;
-  VideoRecordItem({@required this.info});
+  final Function onPress;
+  VideoRecordItem({@required this.info,@required this.onPress});
 
 
   @override
@@ -18,7 +19,7 @@ class VideoRecordItem extends StatelessWidget{
           borderRadius: BorderRadius.all(new Radius.circular(5)),
         ),
         child: FlatButton(
-            onPressed: () {},
+            onPressed: onPress,
             highlightColor: ColorConfig.colorE5,
             padding: EdgeInsets.only(left: 0, right: 0),
             child: new Column(children: <Widget>[

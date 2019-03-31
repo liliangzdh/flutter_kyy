@@ -45,14 +45,15 @@ class RouteUtils {
 //     flutterWebViewPlugin.launch(resourceURL,cookieList: cookies);
     }
 
-    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
-      return new WebView(
+    go(
+      context,
+      new WebView(
         url: resourceURL,
         token: token,
         cookie: cookies,
         title: title,
-      );
-    }));
+      ),
+    );
   }
 
   cleanCookies() async {
@@ -67,9 +68,40 @@ class RouteUtils {
   }
 
   go(BuildContext context, dynamic any) {
-    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
-      return any;
-    }));
+//    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+//      return any;
+//    }));
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return any;
+        },
+        transitionsBuilder: (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+        ) {
+          // 添加一个平移动画
+          return createTransition(animation, child);
+        },
+        transitionDuration: Duration(milliseconds: 250),
+      ),
+    );
+  }
+
+  /// 创建一个平移变换
+  /// 跳转过去查看源代码，可以看到有各种各样定义好的变换
+  static SlideTransition createTransition(
+      Animation<double> animation, Widget child) {
+    return new SlideTransition(
+      position: new Tween<Offset>(
+        begin: const Offset(1.0, 0.0),
+        end: const Offset(0.0, 0.0),
+      ).animate(animation),
+      child: child, // child is the value returned by pageBuilder
+    );
   }
 
   goLogin(BuildContext context) {
@@ -134,7 +166,7 @@ class RouteUtils {
     }
   }
 
-  void tiKuKeepOn(BuildContext context,TiKuStatistic tiKuStatistic) {
+  void tiKuKeepOn(BuildContext context, TiKuStatistic tiKuStatistic) {
     PracticeRecord practiceRecord = tiKuStatistic.practiceRecord;
     if (practiceRecord.practiceID == 0) {
       ToastUtils.show("暂无学习记录");
