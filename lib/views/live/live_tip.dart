@@ -34,7 +34,7 @@ class LiveTip extends StatefulWidget {
 
 class _LiveTip extends State<LiveTip> {
   LiveInfo liveInfo = LiveInfo();
-  LiveState liveState = LiveTipStateEnum.loading ;
+  LiveState liveState = LiveTipStateEnum.loading;
 
   bool isLoading = true;
 
@@ -259,7 +259,7 @@ class _LiveTip extends State<LiveTip> {
 
   getToken() async {
     AppResponse app =
-        await LiveMicroSrv.getAccessToken(widget.liveId.toString());
+    await LiveMicroSrv.getAccessToken(widget.liveId.toString());
     if (app.code == 200) {
       accessToken = app.result['accessToken'];
       liveState =
@@ -269,19 +269,24 @@ class _LiveTip extends State<LiveTip> {
     } else if (app.code == 407) {
       liveState = LiveTipStateEnum.outOfService;
     } else if (app.code == 401) {
-      liveState = LiveTipStateEnum.liveNotStart;
-    } else {
-      liveState = LiveTipStateEnum.liveNotStart;
-    }
-    isLoading = false;
-    setState(() {
-      liveState = liveState;
-      liveInfo = liveInfo;
-    });
-    //如果有权限，
-    if (liveState.routeName == "live") {
-      //立即进去 直播
-      RouteUtils.instance.goNowLive(accessToken, liveInfo.title);
+      liveState = LiveTipStateEnum.livePreStart;
+      //都是未登录，判断是否开始
+      DateTime now = DateTime.now();
+      DateTime startTime = DateTime.parse(liveInfo.startTime);
+      Duration duration = startTime.difference(now);
+      if (duration.inSeconds == 0) {
+        liveState = LiveTipStateEnum.startNotLogin;
+      }
+      isLoading = false;
+      setState(() {
+        liveState = liveState;
+        liveInfo = liveInfo;
+      });
+      //如果有权限，
+      if (liveState.routeName == "live") {
+        //立即进去 直播
+        RouteUtils.instance.goNowLive(accessToken, liveInfo.title);
+      }
     }
   }
 }

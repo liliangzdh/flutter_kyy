@@ -68,27 +68,27 @@ class RouteUtils {
   }
 
   go(BuildContext context, dynamic any) {
-//    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
-//      return any;
-//    }));
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
-          return any;
-        },
-        transitionsBuilder: (
-          BuildContext context,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-          Widget child,
-        ) {
-          // 添加一个平移动画
-          return createTransition(animation, child);
-        },
-        transitionDuration: Duration(milliseconds: 250),
-      ),
-    );
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+      return any;
+    }));
+//    Navigator.of(context).push(
+//      PageRouteBuilder(
+//        pageBuilder: (BuildContext context, Animation<double> animation,
+//            Animation<double> secondaryAnimation) {
+//          return any;
+//        },
+//        transitionsBuilder: (
+//          BuildContext context,
+//          Animation<double> animation,
+//          Animation<double> secondaryAnimation,
+//          Widget child,
+//        ) {
+//          // 添加一个平移动画
+//          return createTransition(animation, child);
+//        },
+//        transitionDuration: Duration(milliseconds: 250),
+//      ),
+//    );
   }
 
   /// 创建一个平移变换

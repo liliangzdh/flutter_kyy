@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo12',
         theme: ThemeData(
           primaryColor: Colors.white,
+          platform: TargetPlatform.iOS
         ),
         home: SplashScreen());
   }
