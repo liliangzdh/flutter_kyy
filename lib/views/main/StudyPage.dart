@@ -159,12 +159,13 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
             showLeft(showLeftMenu),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(right: 80),
+                margin: EdgeInsets.only(right: 50),
                 alignment: AlignmentDirectional.center,
                 child: Text(
                   title,
+                  maxLines: 1,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
@@ -178,15 +179,15 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
 
   showLeft(bool showLeft) {
     if (!showLeft) {
-      return Container(width: 80);
+      return Container(width: 60);
     }
 
     return FlatButton(
       padding: EdgeInsets.all(0),
       child: Container(
-        width: 80,
+        width: 60,
         alignment: AlignmentDirectional.center,
-        padding: EdgeInsets.only(left: 15),
+        padding: EdgeInsets.all(0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -199,7 +200,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
               child: Text(
                 "切换",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Colors.white,
                 ),
               ),
@@ -378,27 +379,6 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
           color: ColorConfig.baseColorPrime,
           child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  new UserCircleImage(
-                    imgUrl: "",
-                    margin: EdgeInsets.only(
-                      left: 10,
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      "用户名",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                    margin: const EdgeInsets.only(left: 10),
-                  )
-                ],
-              ),
-
               //3个顶部按钮
               Container(
                 child: Row(
@@ -406,10 +386,12 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
                   children: <Widget>[
                     initTopBottom("录播课"),
                     initTopBottom("题库"),
-                    initTopBottom("直播回放"),
+                    initTopBottom("直播"),
+                    initTopBottom("回放"),
                   ],
                 ),
                 height: 60,
+                margin: EdgeInsets.only(bottom: 10) ,
                 padding: const EdgeInsets.only(bottom: 10, top: 10),
               ),
             ],
@@ -453,7 +435,7 @@ class _StudyPage extends State<StudyPage> with AutomaticKeepAliveClientMixin {
                     ),
                     new Container(
                       child: new Center(child: renderClass()),
-                      height: 144,
+                      height: 150,
                       margin: EdgeInsets.only(bottom: 10),
                     ),
 

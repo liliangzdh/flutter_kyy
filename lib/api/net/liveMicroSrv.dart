@@ -4,7 +4,7 @@ import '../../model/app_response.dart';
 class LiveMicroSrv {
   ///获取全网7天内前4个直播预告
   static Future<AppResponse> homeLivePreLive() {
-    return ApiManager.instance.send({"url": '/knew/api/wap/preLive'});
+    return ApiManager.instance.send({"url": '/api/v1/live/newHotPreLive?isAll=1'});
   }
 
   ///获取直播 accessToken
@@ -22,7 +22,7 @@ class LiveMicroSrv {
   ///获取我的直播预告
   static Future<AppResponse> getMyPreLive() {
     return ApiManager.instance.send(
-      {"url": '/api/v1/users/preLive'},
+      {"url": '/api/v1/users/preLive?isAllLive=1'},
     );
   }
 
@@ -36,7 +36,8 @@ class LiveMicroSrv {
       "page": page,
       "pageSize": pageSize,
       "sortCourse": sortCourse,
-      "sortClassroom": sortClassroom
+      "sortClassroom": sortClassroom,
+      "isAllLive":1,
     });
   }
 }

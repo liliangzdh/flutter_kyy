@@ -24,7 +24,7 @@ class ApiManager {
     dio.options.connectTimeout = 5000; //5s
     dio.options.receiveTimeout = 3000;
     dio.options.headers.addAll({"Origin": Api.BASE_URL});
-    dio.options.headers.addAll({"User-Agent": "IOS/WEBVIEW"});
+//    dio.options.headers.addAll({"User-Agent": "IOS/WEBVIEW"});
     //设置代理 配合 charles  抓包
 //    dio.onHttpClientCreate = (HttpClient client) {
 //      client.findProxy = (uri) {

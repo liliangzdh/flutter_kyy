@@ -49,6 +49,7 @@ class VideoRecordItem extends StatelessWidget{
                     alignment: AlignmentDirectional.center,
                     child: Text(
                       info.title,
+                      maxLines: 1,
                       style: TextStyle(
                         fontSize: 18,
                         color: ColorConfig.color33,
