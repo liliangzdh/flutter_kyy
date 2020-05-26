@@ -33,8 +33,6 @@ dependencies:
       git:
         url: https://github.com/liliangzdh/chewie.git
   video_player: ^0.7.0
-  flutter_kaoyaya_plugin:
-      path: ./flutter_kaoyaya_plugin
   flutter_webview_plugin:
       git:
         url: https://github.com/liliangzdh/flutter_webview_plugin.git

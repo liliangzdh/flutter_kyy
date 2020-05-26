@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kaoyaya_plugin/flutter_kaoyaya_plugin.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutterkaoyaya/api/net/liveMicroSrv.dart';
 import 'package:flutterkaoyaya/common/Toast.dart';
@@ -137,12 +136,12 @@ class RouteUtils {
             .then((AppResponse data) {
           if (data.code == 200) {
             var result = data.result;
-            FlutterKaoyayaPlugin.live({
-              "accessToken": result["accessToken"],
-              "title": result["title"],
-              "playbackId": mediaId.toString(),
-              "type": type //live
-            });
+//            FlutterKaoyayaPlugin.live({
+//              "accessToken": result["accessToken"],
+//              "title": result["title"],
+//              "playbackId": mediaId.toString(),
+//              "type": type //live
+//            });
           } else {
             ToastUtils.show(data.msg);
           }
@@ -157,11 +156,7 @@ class RouteUtils {
 
   //直播去直播
   goNowLive(String accessToken, String title) {
-    FlutterKaoyayaPlugin.live({
-      "accessToken": accessToken,
-      "title": title,
-      "type": "live" //live
-    });
+
   }
 
   goWebViewCheckLogin(BuildContext context, String url, needAddHttpHeader) {

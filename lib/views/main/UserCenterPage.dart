@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kaoyaya_plugin/flutter_kaoyaya_plugin.dart';
 import 'package:flutterkaoyaya/common/routeUtils.dart';
 import 'package:flutterkaoyaya/dialog/modify_user_name_Dialog.dart';
 import '../../provide/single_global_instance/appstate.dart';
@@ -79,7 +78,7 @@ class _UserCenterPage extends State<UserCenterPage>
         renderCell("我的考币", Icons.memory, context),
         Line(color: ColorConfig.colorE5),
         renderCell("直播回放缓存", Icons.print, context, onPress: () {
-          FlutterKaoyayaPlugin.downloadList();
+
         }),
         Line(
           height: 8,
