@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterkaoyaya/components/Line.dart';
 import 'package:flutterkaoyaya/components/loading.dart';
-
-import './LoginViewModel.dart';
+import 'package:flutterkaoyaya/test/bloc_mvvm/LoginViewModel.dart';
 import '../../theme/Colors.dart';
 
 class Login extends StatefulWidget {
@@ -69,14 +68,14 @@ class _Login extends State<Login> {
                       Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: TextField(
-                            maxLines: 1,
-                            controller: viewModel.passwordController,
-                            decoration: InputDecoration(
-                              hintText: '请输入密码',
-                              border: InputBorder.none,
-                              hintStyle:
-                                  TextStyle(color: ColorConfig.color_ccc),
-                            )),
+                          maxLines: 1,
+                          controller: viewModel.passwordController,
+                          decoration: InputDecoration(
+                            hintText: '请输入密码',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(color: ColorConfig.color_ccc),
+                          )
+                        ),
                       ),
                       Line(
                         height: 1,
@@ -163,16 +162,15 @@ class _Login extends State<Login> {
                       ),
                     ),
                   )),
+
+
               StreamBuilder<bool>(
                 stream: viewModel.outputLoadingStateStream,
                 initialData: viewModel.loadingState,
                 builder: (context, snapshot) {
                   var data = snapshot.data;
                   print('$data');
-                  return Loading(
-                    data,
-                    text: '登录中...',
-                  );
+                  return Loading(data,text: '登录中...',);
                 },
               ),
             ],

@@ -14,6 +14,10 @@ import 'package:flutterkaoyaya/views/WebView.dart';
 import 'package:flutterkaoyaya/views/live/live_tip.dart';
 import 'package:flutterkaoyaya/views/login/Login.dart';
 
+
+//import 'package:flutterkaoyaya/test/bloc_mvvm/Login.dart';
+//import 'package:flutterkaoyaya/test/provider_mvvm/Login.dart';
+
 class RouteUtils {
 //
 
@@ -105,7 +109,10 @@ class RouteUtils {
   }
 
   goLogin(BuildContext context) {
-    go(context, Login());
+//    go(context, Login());
+
+
+      go(context,Login());
   }
 
 //  access: 0 | 1;

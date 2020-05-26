@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterkaoyaya/components/Line.dart';
-import 'package:flutterkaoyaya/components/loading.dart';
-
-import './LoginViewModel.dart';
+import 'package:provider/provider.dart';
 import '../../theme/Colors.dart';
 
-class Login extends StatefulWidget {
+import 'LoginViewModel.dart';
+
+class Login extends StatelessWidget {
+  final loinViewModel = LoginViewModel();
+
   @override
-  State<StatefulWidget> createState() {
-    return new _Login();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: loinViewModel,
+      child: LoginWidget(),
+    );
   }
 }
 
-class _Login extends State<Login> {
-  LoginViewModel viewModel = LoginViewModel();
-
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.dispose();
-  }
-
+class LoginWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 键盘是否 弹窗
     bool isKeyboardShowing = MediaQuery.of(context).viewInsets.vertical > 0;
 
+    // 获取
+    final viewModel = Provider.of<LoginViewModel>(context);
+
+    print('30-------------');
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("登录"),
+        title: Text("登录mvvm测试"),
         elevation: 0,
       ),
       body: Container(
@@ -69,19 +71,22 @@ class _Login extends State<Login> {
                       Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: TextField(
-                            maxLines: 1,
-                            controller: viewModel.passwordController,
-                            decoration: InputDecoration(
-                              hintText: '请输入密码',
-                              border: InputBorder.none,
-                              hintStyle:
-                                  TextStyle(color: ColorConfig.color_ccc),
-                            )),
+                          maxLines: 1,
+                          controller: viewModel.passwordController,
+                          decoration: InputDecoration(
+                            hintText: '请输入密码',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(color: ColorConfig.color_ccc),
+                          ),
+                        ),
                       ),
                       Line(
                         height: 1,
                         color: ColorConfig.colorf4f4f4,
                       ),
+                      Text(viewModel.state == 0
+                          ? '初始化'
+                          : viewModel.state == 1 ? '正在加载' : '加载成功'),
                       Container(
                         width: double.infinity,
                         height: 150,
@@ -94,9 +99,7 @@ class _Login extends State<Login> {
                           elevation: 0,
                           highlightElevation: 0,
                           disabledElevation: 0,
-                          onPressed: () {
-                            viewModel.login(context);
-                          },
+                          onPressed: viewModel.login,
                           child: Text(
                             '登录',
                             style: TextStyle(
@@ -163,18 +166,6 @@ class _Login extends State<Login> {
                       ),
                     ),
                   )),
-              StreamBuilder<bool>(
-                stream: viewModel.outputLoadingStateStream,
-                initialData: viewModel.loadingState,
-                builder: (context, snapshot) {
-                  var data = snapshot.data;
-                  print('$data');
-                  return Loading(
-                    data,
-                    text: '登录中...',
-                  );
-                },
-              ),
             ],
           )),
     );

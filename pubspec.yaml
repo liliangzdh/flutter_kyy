@@ -39,6 +39,8 @@ dependencies:
       git:
         url: https://github.com/liliangzdh/flutter_webview_plugin.git
         path: flutter_webview_plugin
+  provider: ^3.1.0 # 状态管理。
+
 
 dev_dependencies:
   flutter_test:

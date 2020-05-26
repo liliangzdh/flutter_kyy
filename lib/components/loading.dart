@@ -5,7 +5,8 @@ class Loading extends StatelessWidget {
 
 
   final bool isLoading;
-  Loading(this.isLoading);
+  String text = '加载中...';
+  Loading(this.isLoading,{this.text});
 
 
 
@@ -38,7 +39,7 @@ class Loading extends StatelessWidget {
               new Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  "加载...",
+                  text,
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               )

@@ -88,7 +88,7 @@ class ApiManager {
 
       AppResponse app;
       if (response.statusCode == HttpStatus.ok) {
-        print("response:${response.data}");
+        print("response:${response.data}      req url :$url" );
         app = new AppResponse.fromJson(response.data);
       } else {
         app = new AppResponse(response.statusCode, "获取数据错误", null);

@@ -99,9 +99,7 @@ class _UserCenterPage extends State<UserCenterPage>
   }
 
   goLogin(BuildContext context) {
-    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
-      return new Login();
-    }));
+    RouteUtils.instance.goLogin(context);
   }
 
   renderTopNoLogin(BuildContext context) {
